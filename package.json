@@ -1,0 +1,22 @@
+{
+  "name": "sio2confluence",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {"start":"node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dherbolt/SIO2Confluence.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dherbolt/SIO2Confluence/issues"
+  },
+  "homepage": "https://github.com/dherbolt/SIO2Confluence#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
