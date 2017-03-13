@@ -2,7 +2,7 @@ const jetpack = require('fs-jetpack');
 const page = require(__dirname + '/page');
 const sendXhr = require(__dirname + '/sendXhr');
 const auth = require(__dirname + '/auth');
-
+const cfg = JSON.parse(jetpack.read('config.json'));
 
 function bootstrap(callback) {
 	sendXhr('Bootstrap.bootstrap', {
@@ -13,7 +13,6 @@ function bootstrap(callback) {
 
 
 function run() {
-	var cfg = JSON.parse(jetpack.read('config.json'));
 
 	auth.doLogin(cfg.sio.userName, cfg.sio.password, function () {
 		bootstrap(function (args) {
@@ -37,4 +36,21 @@ function run() {
 	});
 }
 
+function runInConfluence() {
+	var
+		Confluence = require('./lib/Confluence'),
+    	confluenceClient = new Confluence({
+        	user: cfg.confluence.userName,
+	        password: cfg.confluence.password,
+    	    baseUrl: cfg.confluence.baseUrl
+    	});
+
+	confluenceClient.createOrUpdatePage(
+    	'KERCON', // Project space
+    	'mosladil', // Page title
+    	'<h1>Tralala</h1>' // Content
+	);
+}
+
 run();
+// runInConfluence();

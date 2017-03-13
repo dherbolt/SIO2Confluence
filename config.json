@@ -4,7 +4,8 @@
 		"password": "aaa123"
 	},
 	"confluence": {
-		"userName": "",
-		"password": ""
+		"userName": "mosladil",
+		"password": "eDHHYJG6Ff4ZUg*JG",
+		"baseUrl": "https://confluence.devfactory.com"
 	}
 }
