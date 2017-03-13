@@ -22,15 +22,15 @@ function run() {
 			// let pageId = '227087075764359201';
 			let pageId = '227087075764359201';
 
-			page.getContent(pageId).then((args) => {
-				let {error, response, body } = args;
-				var page = body.result.page;
-				jetpack.write(`download/${pageId}/page.json`, JSON.stringify(page, null, '\t'));
-				console.log('done');
-			});
+			// page.getContent(pageId).then((args) => {
+			// 	let { error, response, body } = args;
+			// 	var page = body.result.page;
+			// 	jetpack.write(`download/${pageId}/page.json`, JSON.stringify(page, null, '\t'));
+			// 	console.log('done');
+			// });
 
-			page.download(pageId).then(() => {
-				console.log('downloaded');
+			page.download(pageId).then((args) => {
+				console.log('downloaded -- ALL DONE');
 			});
 		});
 	});
