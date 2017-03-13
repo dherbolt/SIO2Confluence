@@ -1,0 +1,1067 @@
+{
+	"updatedTime": "2016-11-07T08:06:40+0000",
+	"chain": [
+		{
+			"dashifiedName": "desktop-client-spec",
+			"name": "Desktop Client (spec)",
+			"pid": "76447",
+			"id": "227087075764359201",
+			"type": "Page"
+		},
+		{
+			"dashifiedName": "kerio-connect-specs",
+			"name": "Kerio Connect (specs)",
+			"pid": "42439",
+			"id": "76447",
+			"type": "Page"
+		},
+		{
+			"dashifiedName": "specifications",
+			"name": "Specifications",
+			"pid": "1186",
+			"id": "42439",
+			"type": "Page"
+		}
+	],
+	"components": {
+		"taskComponents": [],
+		"subpages": [
+			{
+				"updatedTime": "2016-04-29T02:32:14+0000",
+				"dashifiedName": "business-requirements",
+				"updatedBy": {
+					"emailAddress": "hpaunet@kerio.com",
+					"invited": false,
+					"guid": "4ffaaef9096b5a2ff2577992f8868586849c0e66",
+					"fullName": "Heather Paunet",
+					"id": "213051015300122887",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/355517449082848561",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 252,
+							"enabled": false
+						},
+						"center": {
+							"width": 794
+						},
+						"right": {
+							"width": 252,
+							"enabled": false
+						}
+					},
+					"column": "center",
+					"position": 2
+				},
+				"createdBy": {
+					"emailAddress": "pdobry@kerio.com",
+					"invited": false,
+					"guid": "774740191635d230d2899d8864623f02b6890f4a",
+					"fullName": "Pavel Dobrý",
+					"id": "20",
+					"type": "user"
+				},
+				"name": "Business requirements",
+				"createdTime": "2016-04-28T14:34:25+0000",
+				"id": "355517449082848561",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			},
+			{
+				"updatedTime": "2017-03-06T13:52:32+0000",
+				"dashifiedName": "functional-technical-spec",
+				"updatedBy": {
+					"emailAddress": "vbystricky@kerio.com",
+					"invited": false,
+					"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+					"fullName": "Václav Bystřický",
+					"id": "194",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/377775863590047169",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 250,
+							"enabled": false
+						},
+						"center": {
+							"width": 600
+						},
+						"right": {
+							"width": 250,
+							"enabled": false
+						}
+					},
+					"column": "center",
+					"position": 3
+				},
+				"createdBy": {
+					"emailAddress": "vbystricky@kerio.com",
+					"invited": false,
+					"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+					"fullName": "Václav Bystřický",
+					"id": "194",
+					"type": "user"
+				},
+				"hasSubtree": true,
+				"name": "Functional + Technical Spec",
+				"createdTime": "2016-06-27T14:08:26+0000",
+				"id": "377775863590047169",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			},
+			{
+				"updatedTime": "2016-06-27T14:33:26+0000",
+				"dashifiedName": "archive-desktop-client-for-osx-macgap-prototype",
+				"updatedBy": {
+					"emailAddress": "vbystricky@kerio.com",
+					"invited": false,
+					"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+					"fullName": "Václav Bystřický",
+					"id": "194",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/377778062613303125",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 250,
+							"enabled": false
+						},
+						"center": {
+							"width": 600
+						},
+						"right": {
+							"width": 250,
+							"enabled": false
+						}
+					},
+					"column": "center",
+					"position": 4
+				},
+				"createdBy": {
+					"emailAddress": "vbystricky@kerio.com",
+					"invited": false,
+					"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+					"fullName": "Václav Bystřický",
+					"id": "194",
+					"type": "user"
+				},
+				"hasSubtree": true,
+				"name": "Archive (Desktop Client for OSX MacGap Prototype)",
+				"createdTime": "2016-06-27T14:16:58+0000",
+				"id": "377778062613303125",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			},
+			{
+				"updatedTime": "2016-09-05T14:15:59+0000",
+				"dashifiedName": "desktop-client-9-2-in-development",
+				"updatedBy": {
+					"emailAddress": "vbystricky@kerio.com",
+					"invited": false,
+					"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+					"fullName": "Václav Bystřický",
+					"id": "194",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/378814137574403659",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 252,
+							"enabled": false
+						},
+						"center": {
+							"width": 998
+						},
+						"right": {
+							"width": 531,
+							"enabled": true
+						}
+					},
+					"column": "center",
+					"position": 5
+				},
+				"createdBy": {
+					"emailAddress": "vbystricky@kerio.com",
+					"invited": false,
+					"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+					"fullName": "Václav Bystřický",
+					"id": "194",
+					"type": "user"
+				},
+				"name": "Desktop Client 9.2 - in development",
+				"createdTime": "2016-06-30T09:17:28+0000",
+				"id": "378814137574403659",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			},
+			{
+				"updatedTime": "2016-07-01T08:44:00+0000",
+				"dashifiedName": "requirements-from-the-feedback-page",
+				"updatedBy": {
+					"emailAddress": "vbystricky@kerio.com",
+					"invited": false,
+					"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+					"fullName": "Václav Bystřický",
+					"id": "194",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/378820391014285140",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 250,
+							"enabled": false
+						},
+						"center": {
+							"width": 600
+						},
+						"right": {
+							"width": 250,
+							"enabled": false
+						}
+					},
+					"column": "center",
+					"position": 6
+				},
+				"createdBy": {
+					"emailAddress": "zsamuel@kerio.com",
+					"invited": false,
+					"guid": "7e9377fef6b16623f550b99fa38927491c4bbb7e",
+					"fullName": "Zdeněk Samuel",
+					"id": "8",
+					"type": "user"
+				},
+				"name": "Requirements from the feedback page",
+				"createdTime": "2016-06-30T09:41:44+0000",
+				"id": "378820391014285140",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			},
+			{
+				"updatedTime": "2016-08-31T15:55:13+0000",
+				"dashifiedName": "naming-convention-for-client",
+				"updatedBy": {
+					"emailAddress": "pdobry@kerio.com",
+					"invited": false,
+					"guid": "774740191635d230d2899d8864623f02b6890f4a",
+					"fullName": "Pavel Dobrý",
+					"id": "20",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/401922384476881195",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 250,
+							"enabled": false
+						},
+						"center": {
+							"width": 600
+						},
+						"right": {
+							"width": 250,
+							"enabled": false
+						}
+					},
+					"column": "center",
+					"position": 1
+				},
+				"createdBy": {
+					"emailAddress": "pdobry@kerio.com",
+					"invited": false,
+					"guid": "774740191635d230d2899d8864623f02b6890f4a",
+					"fullName": "Pavel Dobrý",
+					"id": "20",
+					"type": "user"
+				},
+				"name": "Naming convention for client",
+				"createdTime": "2016-08-31T15:49:16+0000",
+				"id": "401922384476881195",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			},
+			{
+				"updatedTime": "2016-12-15T09:53:16+0000",
+				"dashifiedName": "haproxy",
+				"updatedBy": {
+					"emailAddress": "spotys@kerio.com",
+					"invited": false,
+					"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+					"fullName": "Štěpán Potyš",
+					"id": "84",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/427037072763866520",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 252,
+							"enabled": false
+						},
+						"center": {
+							"width": 921
+						},
+						"right": {
+							"width": 252,
+							"enabled": false
+						}
+					},
+					"column": "center",
+					"position": 9
+				},
+				"createdBy": {
+					"emailAddress": "spotys@kerio.com",
+					"invited": false,
+					"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+					"fullName": "Štěpán Potyš",
+					"id": "84",
+					"type": "user"
+				},
+				"name": "HAproxy",
+				"createdTime": "2016-11-07T08:07:05+0000",
+				"id": "427037072763866520",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			},
+			{
+				"updatedTime": "2016-11-07T11:43:05+0000",
+				"dashifiedName": "per-domain-operator-integration",
+				"updatedBy": {
+					"emailAddress": "spotys@kerio.com",
+					"invited": false,
+					"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+					"fullName": "Štěpán Potyš",
+					"id": "84",
+					"type": "user"
+				},
+				"role": "Editor",
+				"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/427092074115073756",
+				"sharedExternally": false,
+				"pid": "227087075764359201",
+				"type": "Page",
+				"layout": {
+					"columns": {
+						"left": {
+							"width": 250,
+							"enabled": false
+						},
+						"center": {
+							"width": 600
+						},
+						"right": {
+							"width": 250,
+							"enabled": false
+						}
+					},
+					"column": "center",
+					"position": 10
+				},
+				"createdBy": {
+					"emailAddress": "spotys@kerio.com",
+					"invited": false,
+					"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+					"fullName": "Štěpán Potyš",
+					"id": "84",
+					"type": "user"
+				},
+				"name": "Per Domain Operator Integration",
+				"createdTime": "2016-11-07T11:40:31+0000",
+				"id": "427092074115073756",
+				"roleSource": "Member",
+				"locked": false,
+				"value": {},
+				"iamFollowing": false,
+				"subscribedForEvents": false,
+				"everyoneGroupRole": "Editor"
+			}
+		]
+	},
+	"dashifiedName": "desktop-client-spec",
+	"updatedBy": {
+		"emailAddress": "spotys@kerio.com",
+		"invited": false,
+		"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+		"fullName": "Štěpán Potyš",
+		"id": "84",
+		"type": "user"
+	},
+	"role": "Editor",
+	"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/227087075764359201",
+	"sharedExternally": false,
+	"pid": "76447",
+	"type": "Page",
+	"layout": {
+		"columns": {
+			"left": {
+				"width": 252,
+				"enabled": false
+			},
+			"center": {
+				"width": 846
+			},
+			"right": {
+				"width": 252,
+				"enabled": false
+			}
+		},
+		"column": "center",
+		"position": 76
+	},
+	"createdBy": {
+		"emailAddress": "tskoda@kerio.com",
+		"invited": false,
+		"guid": "0b60dbb1195b6f483c8af8a88148e43a9408aa3f",
+		"fullName": "Tomáš Škoda",
+		"id": "179",
+		"type": "user"
+	},
+	"children": [
+		{
+			"updatedTime": "2016-04-29T02:32:14+0000",
+			"dashifiedName": "business-requirements",
+			"updatedBy": {
+				"emailAddress": "hpaunet@kerio.com",
+				"invited": false,
+				"guid": "4ffaaef9096b5a2ff2577992f8868586849c0e66",
+				"fullName": "Heather Paunet",
+				"id": "213051015300122887",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/355517449082848561",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 252,
+						"enabled": false
+					},
+					"center": {
+						"width": 794
+					},
+					"right": {
+						"width": 252,
+						"enabled": false
+					}
+				},
+				"column": "center",
+				"position": 2
+			},
+			"createdBy": {
+				"emailAddress": "pdobry@kerio.com",
+				"invited": false,
+				"guid": "774740191635d230d2899d8864623f02b6890f4a",
+				"fullName": "Pavel Dobrý",
+				"id": "20",
+				"type": "user"
+			},
+			"name": "Business requirements",
+			"createdTime": "2016-04-28T14:34:25+0000",
+			"id": "355517449082848561",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"updatedTime": "2017-03-06T13:52:32+0000",
+			"dashifiedName": "functional-technical-spec",
+			"updatedBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/377775863590047169",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 250,
+						"enabled": false
+					},
+					"center": {
+						"width": 600
+					},
+					"right": {
+						"width": 250,
+						"enabled": false
+					}
+				},
+				"column": "center",
+				"position": 3
+			},
+			"createdBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"hasSubtree": true,
+			"name": "Functional + Technical Spec",
+			"createdTime": "2016-06-27T14:08:26+0000",
+			"id": "377775863590047169",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"updatedTime": "2016-06-27T14:33:26+0000",
+			"dashifiedName": "archive-desktop-client-for-osx-macgap-prototype",
+			"updatedBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/377778062613303125",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 250,
+						"enabled": false
+					},
+					"center": {
+						"width": 600
+					},
+					"right": {
+						"width": 250,
+						"enabled": false
+					}
+				},
+				"column": "center",
+				"position": 4
+			},
+			"createdBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"hasSubtree": true,
+			"name": "Archive (Desktop Client for OSX MacGap Prototype)",
+			"createdTime": "2016-06-27T14:16:58+0000",
+			"id": "377778062613303125",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"updatedTime": "2016-09-05T14:15:59+0000",
+			"dashifiedName": "desktop-client-9-2-in-development",
+			"updatedBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/378814137574403659",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 252,
+						"enabled": false
+					},
+					"center": {
+						"width": 998
+					},
+					"right": {
+						"width": 531,
+						"enabled": true
+					}
+				},
+				"column": "center",
+				"position": 5
+			},
+			"createdBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"name": "Desktop Client 9.2 - in development",
+			"createdTime": "2016-06-30T09:17:28+0000",
+			"id": "378814137574403659",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"updatedTime": "2016-07-01T08:44:00+0000",
+			"dashifiedName": "requirements-from-the-feedback-page",
+			"updatedBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/378820391014285140",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 250,
+						"enabled": false
+					},
+					"center": {
+						"width": 600
+					},
+					"right": {
+						"width": 250,
+						"enabled": false
+					}
+				},
+				"column": "center",
+				"position": 6
+			},
+			"createdBy": {
+				"emailAddress": "zsamuel@kerio.com",
+				"invited": false,
+				"guid": "7e9377fef6b16623f550b99fa38927491c4bbb7e",
+				"fullName": "Zdeněk Samuel",
+				"id": "8",
+				"type": "user"
+			},
+			"name": "Requirements from the feedback page",
+			"createdTime": "2016-06-30T09:41:44+0000",
+			"id": "378820391014285140",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"updatedTime": "2016-08-31T15:55:13+0000",
+			"dashifiedName": "naming-convention-for-client",
+			"updatedBy": {
+				"emailAddress": "pdobry@kerio.com",
+				"invited": false,
+				"guid": "774740191635d230d2899d8864623f02b6890f4a",
+				"fullName": "Pavel Dobrý",
+				"id": "20",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/401922384476881195",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 250,
+						"enabled": false
+					},
+					"center": {
+						"width": 600
+					},
+					"right": {
+						"width": 250,
+						"enabled": false
+					}
+				},
+				"column": "center",
+				"position": 1
+			},
+			"createdBy": {
+				"emailAddress": "pdobry@kerio.com",
+				"invited": false,
+				"guid": "774740191635d230d2899d8864623f02b6890f4a",
+				"fullName": "Pavel Dobrý",
+				"id": "20",
+				"type": "user"
+			},
+			"name": "Naming convention for client",
+			"createdTime": "2016-08-31T15:49:16+0000",
+			"id": "401922384476881195",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"updatedTime": "2016-12-15T09:53:16+0000",
+			"dashifiedName": "haproxy",
+			"updatedBy": {
+				"emailAddress": "spotys@kerio.com",
+				"invited": false,
+				"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+				"fullName": "Štěpán Potyš",
+				"id": "84",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/427037072763866520",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 252,
+						"enabled": false
+					},
+					"center": {
+						"width": 921
+					},
+					"right": {
+						"width": 252,
+						"enabled": false
+					}
+				},
+				"column": "center",
+				"position": 9
+			},
+			"createdBy": {
+				"emailAddress": "spotys@kerio.com",
+				"invited": false,
+				"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+				"fullName": "Štěpán Potyš",
+				"id": "84",
+				"type": "user"
+			},
+			"name": "HAproxy",
+			"createdTime": "2016-11-07T08:07:05+0000",
+			"id": "427037072763866520",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"updatedTime": "2016-11-07T11:43:05+0000",
+			"dashifiedName": "per-domain-operator-integration",
+			"updatedBy": {
+				"emailAddress": "spotys@kerio.com",
+				"invited": false,
+				"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+				"fullName": "Štěpán Potyš",
+				"id": "84",
+				"type": "user"
+			},
+			"role": "Editor",
+			"coeRoomId": "72f3728084841d1a9db65c44335a41d27bfa96c2/427092074115073756",
+			"sharedExternally": false,
+			"pid": "227087075764359201",
+			"type": "Page",
+			"layout": {
+				"columns": {
+					"left": {
+						"width": 250,
+						"enabled": false
+					},
+					"center": {
+						"width": 600
+					},
+					"right": {
+						"width": 250,
+						"enabled": false
+					}
+				},
+				"column": "center",
+				"position": 10
+			},
+			"createdBy": {
+				"emailAddress": "spotys@kerio.com",
+				"invited": false,
+				"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+				"fullName": "Štěpán Potyš",
+				"id": "84",
+				"type": "user"
+			},
+			"name": "Per Domain Operator Integration",
+			"createdTime": "2016-11-07T11:40:31+0000",
+			"id": "427092074115073756",
+			"roleSource": "Member",
+			"locked": false,
+			"value": {},
+			"iamFollowing": false,
+			"subscribedForEvents": false,
+			"everyoneGroupRole": "Editor"
+		},
+		{
+			"layout": {
+				"column": "center",
+				"position": 7
+			},
+			"updatedTime": "2016-06-28T11:40:40+0000",
+			"updatedBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"role": "Editor",
+			"createdBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"children": [
+				{
+					"layout": {
+						"position": 1
+					},
+					"updatedTime": "2016-06-27T14:21:45+0000",
+					"dashifiedName": "backlog",
+					"updatedBy": {
+						"emailAddress": "vbystricky@kerio.com",
+						"invited": false,
+						"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+						"fullName": "Václav Bystřický",
+						"id": "194",
+						"type": "user"
+					},
+					"role": "Editor",
+					"createdBy": {
+						"emailAddress": "vbystricky@kerio.com",
+						"invited": false,
+						"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+						"fullName": "Václav Bystřický",
+						"id": "194",
+						"type": "user"
+					},
+					"name": "Backlog",
+					"createdTime": "2016-06-27T14:21:45+0000",
+					"id": "377779299563884573",
+					"roleSource": "Member",
+					"type": "Link",
+					"value": {
+						"url": "https://jira.kerio.com/browse/UCB-50"
+					}
+				},
+				{
+					"layout": {
+						"position": 0
+					},
+					"updatedTime": "2016-06-28T11:40:40+0000",
+					"dashifiedName": "business-requirements-for-windows-desktop-app",
+					"updatedBy": {
+						"emailAddress": "vbystricky@kerio.com",
+						"invited": false,
+						"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+						"fullName": "Václav Bystřický",
+						"id": "194",
+						"type": "user"
+					},
+					"role": "Editor",
+					"createdBy": {
+						"emailAddress": "vbystricky@kerio.com",
+						"invited": false,
+						"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+						"fullName": "Václav Bystřický",
+						"id": "194",
+						"type": "user"
+					},
+					"name": "Business requirements for Windows desktop app",
+					"createdTime": "2016-06-28T11:40:40+0000",
+					"id": "378108869584464555",
+					"roleSource": "Member",
+					"type": "Link",
+					"value": {
+						"url": "https://jira.kerio.com/browse/UCB-7"
+					}
+				}
+			],
+			"createdTime": "2016-06-27T14:21:45+0000",
+			"id": "377779295268917258",
+			"roleSource": "Member",
+			"type": "LinkList",
+			"value": {}
+		},
+		{
+			"updatedTime": "2016-06-27T14:27:08+0000",
+			"dashifiedName": "motivation",
+			"updatedBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"role": "Editor",
+			"type": "TextNote",
+			"revision": 3,
+			"layout": {
+				"column": "center",
+				"position": 0
+			},
+			"createdBy": {
+				"emailAddress": "vbystricky@kerio.com",
+				"invited": false,
+				"guid": "7c2197dea0b3828b8300ed0f1d963aee108cd275",
+				"fullName": "Václav Bystřický",
+				"id": "194",
+				"type": "user"
+			},
+			"name": "Motivation",
+			"createdTime": "2016-06-27T14:26:12+0000",
+			"id": "377780446320152794",
+			"roleSource": "Member",
+			"value": {
+				"zeroDiff": "!{language:en}",
+				"text": ""
+			}
+		},
+		{
+			"updatedTime": "2016-11-07T08:06:40+0000",
+			"dashifiedName": "ucb-5-bring-voice-video-workflows-into-kerio-connect-client",
+			"updatedBy": {
+				"emailAddress": "spotys@kerio.com",
+				"invited": false,
+				"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+				"fullName": "Štěpán Potyš",
+				"id": "84",
+				"type": "user"
+			},
+			"role": "Editor",
+			"type": "TextNote",
+			"revision": 1,
+			"layout": {
+				"column": "center",
+				"position": 8
+			},
+			"createdBy": {
+				"emailAddress": "spotys@kerio.com",
+				"invited": false,
+				"guid": "823a72f7d291f78b414d75d10dd4df0c63ab1076",
+				"fullName": "Štěpán Potyš",
+				"id": "84",
+				"type": "user"
+			},
+			"name": "UCB-5 Bring voice/video workflows into Kerio Connect client",
+			"createdTime": "2016-11-07T08:06:04+0000",
+			"id": "427036810770861411",
+			"roleSource": "Member",
+			"value": {
+				"zeroDiff": "!{language:cs}",
+				"text": ""
+			}
+		}
+	],
+	"hasSubtree": true,
+	"name": "Desktop Client (spec)",
+	"createdTime": "2015-05-18T12:18:59+0000",
+	"id": "227087075764359201",
+	"roleSource": "Member",
+	"locked": false,
+	"value": {},
+	"iamFollowing": true,
+	"subscribedForEvents": false,
+	"everyoneGroupRole": "Editor"
+}
