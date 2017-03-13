@@ -1,0 +1,10 @@
+{
+	"sio": {
+		"userName": "dherbolt@kerio.com",
+		"password": "aaa123"
+	},
+	"confluence": {
+		"userName": "",
+		"password": ""
+	}
+}
