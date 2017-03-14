@@ -25,7 +25,7 @@ function addChildren(node, html, isRoot) {
 		html.push(addChild(child, html));
 	}
 	if (lastLayout && isRoot) {
-		body.push(`</div>`);
+		body.push(`</div></div>`);
 	}
 }
 
@@ -37,6 +37,10 @@ function addChild(node, html) {
 		if (lastLayout) {
 			html.push(`</div>`);
 		}
+		else {
+			html.push('<div class="layoutWrap">');
+		}
+
 		lastLayout = node.layout.column;
 		let width = pageLayout[lastLayout].width;
 		if (width) {
@@ -117,6 +121,11 @@ let html = `
 		}
 		hr {
 			border: 1px solid #eeeeee;
+		}
+		.layoutWrap {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
 		}
 
 	</style>
