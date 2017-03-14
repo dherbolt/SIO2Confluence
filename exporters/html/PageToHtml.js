@@ -5,7 +5,8 @@ const layoutParser = require(APP_ROOT + '/data-sources/sio/layoutParser');
 const addTable = require(__dirname + '/Table');
 
 const useLayouts = true;
-const pageRootPath = path.normalize(APP_ROOT + '/download/10k-users-in-kerio-connect--58309038387064065');
+//const pageRootPath = path.normalize(APP_ROOT + '/download/10k-users-in-kerio-connect--58309038387064065');
+const pageRootPath = path.normalize(APP_ROOT + '/download/desktop-client-spec--227087075764359201');
 const outPath = pageRootPath + '/index.html';
 const pageJson = pageRootPath + '/page.json';
 
@@ -34,7 +35,7 @@ function addChildren(node, html, isRoot) {
 let lastLayout;
 
 function addChild(node, html) {
-	if (node.layout && node.layout.column !== lastLayout) {
+	if (node.layout && node.layout.column && node.layout.column !== lastLayout) {
 		if (lastLayout) {
 			html.push(`</div>`);
 		}
@@ -63,7 +64,7 @@ function addChild(node, html) {
 
 	if (node.type === 'TextNote') {
 		html.push(`<h2>${node.name}</h2>`);
-		html.push(`<div>${node.value}</div>`);
+		html.push(`<div>${node.value || ''}</div>`);
 		pushDelmiter(html);
 	}
 
@@ -91,6 +92,17 @@ function addChild(node, html) {
 	}
 	else if (node.type === 'File') {
 		html.push(`<a href="${node.file.name}">${node.name}</a>`);
+	}
+	else if (node.type === 'Page') {
+		html.push(`<h3><a href="${node.id}">${node.name}</a></h3>`);
+	}
+	else if (node.type === 'LinkList') {
+		html.push(`<h2>Links</h2>`);
+		addChildren(node, html);
+		pushDelmiter(html);
+	}
+	else if (node.type === "Link") {
+		html.push(`<div><a href="${node.value}">${node.name}</a></div>`);
 	}
 	else {
 		throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
