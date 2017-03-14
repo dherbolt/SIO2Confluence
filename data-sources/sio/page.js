@@ -1,12 +1,13 @@
+const APP_ROOT = __dirname + '/../..';
 const request = require('request');
 const fs = require('fs');
-const sortChildren = require(__dirname + '/importers/sio/sortChildren');
+const sortChildren = require(__dirname + '/sortChildren');
 
 
-const sendXhr = require(__dirname + '/sendXhr');
-const auth = require(__dirname + '/auth');
+const sendXhr = require(APP_ROOT + '/sendXhr');
+const auth = require(APP_ROOT + '/auth');
 const jetpack = require('fs-jetpack');
-const cfg = JSON.parse(jetpack.read('config.json'));
+const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 var pages = {};
 
 
@@ -137,6 +138,10 @@ function addFile(coeId, id, outFilePath) {
 
 
 function downloadAllFiles(resolve) {
+	if (files.length === 0) {  // no files
+		resolve();
+		return;
+	}
 	downloadCallback(0, resolve);
 }
 

@@ -3,6 +3,9 @@ const columnOrder = JSON.parse(jetpack.read(__dirname + '/../../config.json')).s
 
 module.exports = function parseColumns(page) {
 	let columns = {};
+	if (!page.children) {
+		return columns;
+	}
 	for (let child of page.children) {
 		let layout = child.layout;
 		columns[layout.column] = columns[layout.column] || [];

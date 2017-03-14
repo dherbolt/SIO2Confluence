@@ -1,5 +1,5 @@
 const jetpack = require('fs-jetpack');
-const page = require(__dirname + '/page');
+const page = require(__dirname + '/data-sources/sio/page');
 const sendXhr = require(__dirname + '/sendXhr');
 const auth = require(__dirname + '/auth');
 const cfg = JSON.parse(jetpack.read('config.json'));

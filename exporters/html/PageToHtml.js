@@ -1,7 +1,7 @@
 const jetpack = require('fs-jetpack');
 const path = require('path');
 const APP_ROOT = __dirname + '/../..';
-const layoutParser = require(APP_ROOT + '/importers/sio/layoutParser');
+const layoutParser = require(APP_ROOT + '/data-sources/sio/layoutParser');
 const addTable = require(__dirname + '/Table');
 
 const useLayouts = true;
