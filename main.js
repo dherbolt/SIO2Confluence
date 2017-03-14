@@ -17,6 +17,12 @@ function run() {
 	auth.doLogin(cfg.sio.userName, cfg.sio.password, function () {
 		bootstrap(function (args) {
 			let { error, response, body } = args;
+
+			if (!body.result.bootstrapData) {
+				console.log('Login failed!');
+				process.exit(1);
+			}
+
 			auth.info.tenant = body.result.bootstrapData.tenant;
 			auth.info.user = body.result.bootstrapData.user;
 			// let pageId = '227087075764359201';

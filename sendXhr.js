@@ -1,5 +1,6 @@
 const request = require('request');
 const auth = require(__dirname + '/auth');
+const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read('config.json'));
 
 let reqId = 2;

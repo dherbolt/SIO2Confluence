@@ -1,4 +1,5 @@
 const request = require('request');
+const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read('config.json'));
 
 let info = {
