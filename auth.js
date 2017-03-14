@@ -1,5 +1,5 @@
 const request = require('request');
-
+const cfg = JSON.parse(jetpack.read('config.json'));
 
 let info = {
 	accessToken: null,
@@ -22,11 +22,11 @@ function sendXhr(method, params, callback) {
 		uri;
 
 	if (method !== 'Session.create') {
-		uri = 'https://samepage.io/api/app/';
+		uri = `${cfg.sio.baseUrl}/api/app/`;
 		headers['Authorization'] = info.tokenType + ' ' + info.accessToken;
 	}
 	else {
-		uri = 'https://samepage.io/login/api/';
+		uri = `${cfg.sio.baseUrl}/login/api/`;
 	}
 
 	uri = uri + 'jsonrpc?method=' + method;
@@ -56,7 +56,7 @@ module.exports.info = info;
 
 module.exports.doLogin = function(userName, password, callback) {
 	request({
-		uri: "https://samepage.io/login/oauth/token",
+		uri: `${cfg.sio.baseUrl}/login/oauth/token`,
 		method: 'POST',
 		timeout: 10000,
 		followRedirect: true,

@@ -1,12 +1,13 @@
 {
 	"sio": {
-		"userName": "dherbolt@kerio.com",
+		"userName": "",
 		"password": "",
+		"baseUrl": "https://samepage.io",
 		"sourcePageUrl": "https://samepage.io/app/#!/72f3728084841d1a9db65c44335a41d27bfa96c2/page-58309038387064065-10k-users-in-kerio-connect"
 	},
 	"confluence": {
-		"userName": "mosladil",
-		"password": "eDHHYJG6Ff4ZUg*JG",
+		"userName": "",
+		"password": "",
 		"baseUrl": "https://confluence.devfactory.com",
 		"targetPageUrl": ""
 	}

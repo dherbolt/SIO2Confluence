@@ -1,7 +1,7 @@
 const sendXhr = require(__dirname + '/sendXhr');
 const auth = require(__dirname + '/auth');
 const jetpack = require('fs-jetpack');
-
+const cfg = JSON.parse(jetpack.read('config.json'));
 
 function download(pageId, parentDir) {
 	return new Promise(function (resolve, reject) {
@@ -124,7 +124,7 @@ var files = [];
 
 function addFile(coeId, id, outFilePath) {
 	files.push({
-		url: `https://samepage.io/${coeId}/file/${id}`,
+		url: `${cfg.sio.baseUrl}/${coeId}/file/${id}`,
 		path: outFilePath
 	});
 }
