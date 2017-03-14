@@ -62,7 +62,7 @@ module.exports = function addTable(node, html) {
 			if (mapWidths[column]) {
 				width = `width: ${mapWidths[column]}px`;
 			}
-			tbody += `<td style="border: 1px solid #eeeeee; padding: 3px; ${width}">${cellValue}</td>`;
+			tbody += `<td style="border: 1px solid #eeeeee; padding-left: 3px; ${width}">${cellValue}</td>`;
 		}
 		tbody += '</tr>';
 	}
