@@ -111,7 +111,7 @@ function parseFile(node, coeId, dirPath) {
 	if (!node.file) {
 		return;
 	}
-	addFile(coeId, node.id, `${dirPath}/${node.dashifiedName}`);
+	addFile(coeId, node.id, `${dirPath}/${node.name}`);
 	let file = node.file;
 	return {
 		name: file.name,

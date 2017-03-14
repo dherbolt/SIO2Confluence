@@ -75,7 +75,7 @@ function addChild(node, html) {
 	else if (node.type === 'File' && node.file.properties.imageFormat) {
 		let imgInfo = node.file.properties;
 		// html.push(JSON.stringify(node));
-		html.push(`<div> <img src="${node.file.dashifiedName}" width="${imgInfo.imageSize.width}" height="${imgInfo.imageSize.height}" /> </div>`);
+		html.push(`<div> <img src="${node.file.name}" width="${imgInfo.imageSize.width}" height="${imgInfo.imageSize.height}" /> </div>`);
 	}
 
 	else if (node.type === 'Table') {
@@ -89,7 +89,7 @@ function addChild(node, html) {
 		pushDelmiter(html);
 	}
 	else if (node.type === 'File') {
-		html.push(`<a href="${node.file.dashifiedName}">${node.name}</a>`);
+		html.push(`<a href="${node.file.name}">${node.name}</a>`);
 	}
 	else {
 		throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
