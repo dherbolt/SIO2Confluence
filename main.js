@@ -69,8 +69,9 @@ function runInConfluence() {
 			parts = cfg.confluence.targetPageUrl.match(/\/display\/(\w+)\/(.*[^/])\/?$/);
 
 			if (parts.length === 3) {
-				projectSpaceId = parts[1];
-				pageTitle = parts[2];
+				projectSpaceId = parts[1] || '';
+				pageTitle = parts[2] || '';
+				pageTitle = pageTitle.replace('+', ' ');
 			}
 		}	
 	}
@@ -83,14 +84,22 @@ function runInConfluence() {
 		user: cfg.confluence.userName,
 		password: cfg.confluence.password,
 		baseUrl: cfg.confluence.baseUrl,
-		space: projectSpaceId
+		space: projectSpaceId.trim(),
+		rootPage: pageTitle
 	});
 
+
+//    confluenceClient.confluence.getContentByPageTitle(confluenceClient.space, pageTitle, (err, data) => {
+//        if (err !== null) console.log(err);
+//
+//		console.log(data.results);
+//    });
+
 	confluenceClient.createOrUpdatePage(
-    	pageTitle, // Page title
-    	'<h1>Tralala</h1>' // Content
+    	'dherbolt test', // Page title
+    	'<h1>abcddd</h1>' // Content
 	);
 }
 
-run();
-// runInConfluence();
+//run();
+ runInConfluence();
