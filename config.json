@@ -9,6 +9,7 @@
 		"userName": "",
 		"password": "",
 		"baseUrl": "https://confluence.devfactory.com",
-		"targetPageUrl": "https://confluence.devfactory.com/display/KERCON/mosladil"
+		"targetSpace": "KERCON",
+		"targetPage": "mosladil"
 	}
 }
