@@ -12,7 +12,9 @@ function sortChildrenInternal(node) {
 	let children = [];
 
 	for (let columnName of columnOrder) {
-		children = children.concat(columns[columnName]);
+		if (columns[columnName]) {
+			children = children.concat(columns[columnName]);
+		}
 	}
 
 	return children;
