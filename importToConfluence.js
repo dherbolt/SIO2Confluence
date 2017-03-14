@@ -20,8 +20,11 @@ function run() {
 	let page = JSON.parse(jetpack.read(`download/${sourceDir}/page.json`));
 
 	let content = {
-		textNote: ''
+		textNote: '',
+		attachments: []
 	};
+
+	console.log(`Importing page: ${page.name}"`);
 
 	for (let component of page.children) {
 		// console.log(`Found ${component.type} => ${component.name}`);
@@ -31,6 +34,14 @@ function run() {
 					content.textNote += component.value;
 				}
 				break;
+			case 'Images':
+			case 'FileLib':
+				for (let file of component.children) {
+					if (file.type === 'File') {
+						content.attachments.push(`${file.name}`);
+					}
+				}
+				break;
 			default:
 		}
 	}
@@ -38,7 +49,7 @@ function run() {
 	let options = {
 		bare: true,
 		breakBeforeBr: true,
-  		fixUri: true,
+		fixUri: true,
 		hideComments: true,
 		indent: true,
 		'output-xhtml': true,
@@ -57,6 +68,13 @@ function run() {
 				// use id to add new subpage
 			}
 		);
+	});
+
+	console.log(`Ready to upload ${content.attachments.length} files.`);
+	content.attachments.forEach(function(fileName) {
+		client.uploadOrUpdateFile(page.name, fileName, `download/${sourceDir}/${fileName}`, function (attachment) {
+			console.log(attachment);
+		});
 	});
 }
 
