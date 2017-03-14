@@ -25,9 +25,9 @@ function run() {
 
 			auth.info.tenant = body.result.bootstrapData.tenant;
 			auth.info.user = body.result.bootstrapData.user;
-			// let pageId = '227087075764359201';
 			let pageId;
-
+			// let pageId = '227087075764359201';  // desktop app root
+			// let pageId = '471215215221119932';  // table test
 			if (cfg.sio.sourcePageUrl) {
 				let parts = cfg.sio.sourcePageUrl.match(/\/page-(\d+?)-.*/i);
 
