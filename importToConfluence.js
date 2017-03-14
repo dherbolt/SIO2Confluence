@@ -50,7 +50,12 @@ function run() {
 		// Post it
 		client.createOrUpdatePage(
 			page.name,
-			parsedHtml
+			parsedHtml,
+			null, // start in root page defined in cfg
+			function (result) {
+				console.log('Callback - ' + result.id);
+				// use id to add new subpage
+			}
 		);
 	});
 }
