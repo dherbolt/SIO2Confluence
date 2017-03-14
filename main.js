@@ -20,7 +20,19 @@ function run() {
 			auth.info.tenant = body.result.bootstrapData.tenant;
 			auth.info.user = body.result.bootstrapData.user;
 			// let pageId = '227087075764359201';
-			let pageId = '227087075764359201';
+			let pageId;
+
+			if (cfg.sio.sourcePageUrl) {
+				let parts = cfg.sio.sourcePageUrl.match(/\/page-(\d+?)-.*/i);
+
+				if (parts.length === 2) {
+					pageId = parts[1];
+				}
+			}
+
+			if (!pageId) {
+				throw 'Source page url is not defined in config.json';
+			}
 
 			// page.getContent(pageId).then((args) => {
 			// 	let { error, response, body } = args;
