@@ -54,6 +54,12 @@ function download(pageId, parentDir) {
 			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
 			jetpack.write(`${dirName}/page.json`, JSON.stringify(page, null, '\t'));
 
+			// skip subPages
+			if (!cfg.sio.downloadSubpages) {
+				downloadAllFiles(resolve);
+				return;
+			}
+
 			let subPages = [];
 			for (let page of sioPage.components.subpages) {
 				subPages.push(download(page.id, dirName));
