@@ -57,15 +57,37 @@ function run() {
 function runInConfluence() {
 	var
 		Confluence = require('./lib/Confluence'),
-    	confluenceClient = new Confluence({
-        	user: cfg.confluence.userName,
-	        password: cfg.confluence.password,
-    	    baseUrl: cfg.confluence.baseUrl
-    	});
+    	confluenceClient;
+
+
+	let projectSpaceId, pageTitle;
+
+	if (cfg.confluence.targetPageUrl) {
+		let parts;
+
+		if ((/display/i).test(cfg.confluence.targetPageUrl)) {
+			parts = cfg.confluence.targetPageUrl.match(/\/display\/(\w+)\/(.*[^/])\/?$/);
+
+			if (parts.length === 3) {
+				projectSpaceId = parts[1];
+				pageTitle = parts[2];
+			}
+		}	
+	}
+
+	if (!projectSpaceId || !pageTitle) {
+		throw 'Target page URL is not defined in config.json or it is in invalid format.';
+	}
+
+	confluenceClient = new Confluence({
+		user: cfg.confluence.userName,
+		password: cfg.confluence.password,
+		baseUrl: cfg.confluence.baseUrl,
+		space: projectSpaceId
+	});
 
 	confluenceClient.createOrUpdatePage(
-    	'KERCON', // Project space
-    	'mosladil', // Page title
+    	pageTitle, // Page title
     	'<h1>Tralala</h1>' // Content
 	);
 }
