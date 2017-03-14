@@ -2,6 +2,7 @@ const jetpack = require('fs-jetpack');
 const path = require('path');
 const APP_ROOT = __dirname + '/../..';
 const layoutParser = require(APP_ROOT + '/importers/sio/layoutParser');
+const addTable = require(__dirname + '/Table');
 
 const useLayouts = true;
 const pageRootPath = path.normalize(APP_ROOT + '/download/10k-users-in-kerio-connect--58309038387064065');
@@ -55,7 +56,7 @@ function addChild(node, html) {
 			'vertical-align: top',
 			'overflow-x: hidden',
 			'border: 1px solid #eeeeee',
-			'margin: 10px'
+			'padding: 10px'
 		];
 		html.push(`<div class="column column-${node.layout.column}" style="${styles.join(';')}";>`);
 	}
@@ -79,7 +80,7 @@ function addChild(node, html) {
 	}
 
 	else if (node.type === 'Table') {
-		html.push(`<div> TABLE - TODO </div>`);
+		addTable(node, html);
 		pushDelmiter(html);
 	}
 
@@ -99,6 +100,8 @@ function addChild(node, html) {
 function pushDelmiter(html) {
 	html.push('<hr />');
 }
+
+
 
 addChildren(page, body, true);
 

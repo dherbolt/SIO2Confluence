@@ -96,7 +96,7 @@ function processChildren(node, coeId, dirPath) {
 }
 
 function processChild(node, coeId, dirPath) {
-	return {
+	let nodeInfo = {
 		type: node.type,
 		name: node.name,
 		id: node.id,
@@ -105,6 +105,12 @@ function processChild(node, coeId, dirPath) {
 		value: node.value && (node.value.text || node.value.url || undefined),
 		file: parseFile(node, coeId, dirPath)
 	};
+
+	if (nodeInfo.type === 'Table') {
+		nodeInfo.value = node.value;
+	}
+
+	return nodeInfo;
 }
 
 function parseFile(node, coeId, dirPath) {
