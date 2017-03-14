@@ -1,3 +1,8 @@
+const request = require('request');
+const fs = require('fs');
+const sortChildren = require(__dirname + '/importers/sio/sortChildren');
+
+
 const sendXhr = require(__dirname + '/sendXhr');
 const auth = require(__dirname + '/auth');
 const jetpack = require('fs-jetpack');
@@ -41,6 +46,8 @@ function download(pageId, parentDir) {
 				name: sioPage.name,
 				children: processChildren(sioPage, coeId, dirName)
 			};
+
+			page = sortChildren(page);
 
 			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
 			jetpack.write(`${dirName}/page.json`, JSON.stringify(page, null, '\t'));
@@ -92,6 +99,7 @@ function processChild(node, coeId, dirPath) {
 		type: node.type,
 		name: node.name,
 		id: node.id,
+		layout: node.layout,
 		children: processChildren(node, coeId, dirPath),
 		value: node.value && (node.value.text || node.value.url || undefined),
 		file: parseFile(node, coeId, dirPath)
@@ -161,56 +169,12 @@ function downloadFile(file, callback) {
 	});
 }
 
-function downloadFile2(file) {
-	let { url, path } = file;
-
-	jetpack.write(path, '');
-	// var file = fs.createWriteStream(path);
-
-	return new Promise(function (resolve, reject) {
-		request({
-			uri: url,
-			method: 'GET',
-			timeout: 10000,
-			followRedirect: true,
-			followAllRedirects: true,
-			maxRedirects: 10,
-			jar: true,
-			gzip: true,
-		}, function (error, response, data) {
-			console.log(url, path);
-			// if (response.statusCode !== 200) {
-			// 	console.log("oops, got a " + response.statusCode);
-			// 	return;
-			// }
-			// file.on('finish', function () {
-			// 	console.log('Completed: ' + path);
-			// 	file.close(resolve);
-			// });
-			// response.pipe(file).on('error', handleFailure);
-			// file.on('error', handleFailure);
-			var binary = Buffer.concat(data);
-
-			//console.log(typeof data);
-			//	debugger;
-			jetpack.write(path, data);
-
-			// resolve();
-		});
-	});
-}
 //471637758398743956
 //https://samepage.io/72f3728084841d1a9db65c44335a41d27bfa96c2/imagepreview/471637758398743956?width=681&height=639&version=1
 //https://samepage.io/72f3728084841d1a9db65c44335a41d27bfa96c2/file/471637758398743956
 
 //https://samepage.io/72f3728084841d1a9db65c44335a41d27bfa96c2/file/471637891542730187/High-level-architecture.xml
 //https://samepage.io/72f3728084841d1a9db65c44335a41d27bfa96c2/file/471637891542730187
-
-const request = require('request');
-const fs = require('fs');
-
-function handleFailure() { }
-
 
 
 module.exports = {

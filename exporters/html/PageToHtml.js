@@ -43,6 +43,9 @@ function addChild(node, html) {
 	else if (node.type === 'File') {
 		html.push(`<a href="${node.file.dashifiedName}">${node.name}</a>`);
 	}
+	else {
+		throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
+	}
 }
 
 addChildren(page, body);
