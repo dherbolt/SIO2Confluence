@@ -27,6 +27,13 @@ function download(pageId, parentDir) {
 
 		getContent(pageId).then((args) => {
 			let { error, response, body } = args;
+
+			if (body.error) {
+				console.error(`ERROR: ID: ${pageId} -- ${JSON.stringify(body.error)}`);
+				console.error('Page cannot be downloaded!');
+				return;
+			}
+
 			let sioPage = body.result.page;
 			let dirName = `${sioPage.dashifiedName}--${pageId}`;
 			let coeId = sioPage.coeRoomId.split('/')[0];
@@ -107,6 +114,7 @@ function processChild(node, coeId, dirPath) {
 		type: node.type,
 		name: node.name,
 		id: node.id,
+		dashifiedName: node.dashifiedName,
 		layout: node.layout,
 		children: processChildren(node, coeId, dirPath),
 		value: node.value && (node.value.text || node.value.url || undefined),
