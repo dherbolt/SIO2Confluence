@@ -45,7 +45,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
 				console.log('Upload attachment: ' + fileName);
-				client.uploadOrUpdateFile(page.name, fileName, `download/${sourceDir}/${fileName}`, function (attachment) { });
+				client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) { });
 			}
 
 			// let pages = [];
@@ -111,12 +111,12 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 							console.log(`Page ${result.title} uploaded`);
 							const uploadSubPage = function (index) {
 								const pageInfo = page.subPages[index];
-								console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
 
 								if (!pageInfo) {
 									resolvePageUploaded();
 									return;
 								}
+								console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
 
 								const dir = `${sourceDir}/${pageInfo.dashifiedName}--${pageInfo.id}`;
 								run(dir, parentPageId, function () {
