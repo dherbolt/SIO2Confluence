@@ -20,7 +20,7 @@ let pageLayout;
 function addChildren(node, html, isRoot) {
 	if (isRoot) {
 		pageLayout = node.layout.columns;
-		console.log(pageLayout);
+	//	console.log(pageLayout);
 	}
 
 	for (let child of node.children) {
@@ -157,4 +157,4 @@ ${body}
 
 jetpack.write(outPath, html);
 
-console.log('Done');
+console.log(`Output written: ${outPath}\nDone.`);

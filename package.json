@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node main.js",
 	"export": "node main.js",
-    "import": "node importToConfluence.js"
+    "import": "node importToConfluence.js",
+    "to-html": "node exporters/html/PageToHtml.js"
   },
   "repository": {
     "type": "git",
