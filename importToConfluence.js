@@ -2,6 +2,7 @@ const Confluence = require('./lib/Confluence');
 const jetpack = require('fs-jetpack');
 const tidy = require('htmltidy').tidy;
 const cfg = JSON.parse(jetpack.read('config.json'));
+const processPage = require('./exporters/html/PageToHtml');
 
 function run() {
 	if (!cfg.confluence.targetSpace || !cfg.confluence.targetPage) {
@@ -16,66 +17,89 @@ function run() {
 		rootPage: cfg.confluence.targetPage
 	});
 
-	let sourceDir = '10k-users-in-kerio-connect--58309038387064065';
-	let page = JSON.parse(jetpack.read(`download/${sourceDir}/page.json`));
+	//let sourceDir = __dirname + '/download/10k-users-in-kerio-connect--58309038387064065';
+	let sourceDir = __dirname + '/download/daniel-herbolt--4507';
 
-	let content = {
-		textNote: '',
-		attachments: []
+	let page = processPage(sourceDir);
+
+	jetpack.write('out.txt', JSON.stringify(page, null, '\t'));
+
+	const getFileLink = function (pageId, fileName) {
+		return '/download/attachments/' + pageId + '/' + encodeURI(fileName);
 	};
 
-	console.log(`Importing page: ${page.name}"`);
-
-	for (let component of page.children) {
-		// console.log(`Found ${component.type} => ${component.name}`);
-		switch (component.type) {
-			case 'TextNote':
-				if (component.value) {
-					content.textNote += component.value;
-				}
-				break;
-			case 'Images':
-			case 'FileLib':
-				for (let file of component.children) {
-					if (file.type === 'File') {
-						content.attachments.push(`${file.name}`);
-					}
-				}
-				break;
-			default:
-		}
-	}
-
-	let options = {
-		bare: true,
-		breakBeforeBr: true,
-		fixUri: true,
-		hideComments: true,
-		indent: true,
-		'output-xhtml': true,
-		'show-body-only': true
+	const getConfluenceSubPageUrl = function(confluenceId) {
+		return '/pages/viewpage.action?pageId=' + confluenceId;
 	};
 
-	// Parse and fix HTML
-	tidy(content.textNote, options, function (err, parsedHtml) {
-		// Post it
-		client.createOrUpdatePage(
-			page.name,
-			parsedHtml,
-			null, // start in root page defined in cfg
-			function (result) {
-				console.log('Callback - ' + result.id);
-				// use id to add new subpage
+	// sio-id => confuluence-id
+	let pageMap = {};
+
+
+	client.createOrUpdatePage(
+		page.title,
+		'',
+		null, // start in root page defined in cfg
+		function (result) {
+			for (let fileName of page.attachments) {
+				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
+				console.log('Upload attachment: ' + fileName);
+				client.uploadOrUpdateFile(page.title, fileName, `download/${sourceDir}/${fileName}`, function (attachment) {});
 			}
-		);
-	});
 
-	console.log(`Ready to upload ${content.attachments.length} files.`);
-	content.attachments.forEach(function(fileName) {
-		client.uploadOrUpdateFile(page.name, fileName, `download/${sourceDir}/${fileName}`, function (attachment) {
-			console.log(attachment);
-		});
-	});
+			let pages = [];
+			for (let subPage of page.subPages) {
+				let promise = client.getPageIdByTitle(subPage.name);
+
+				promise.then((id) => {
+					// ok - get id
+					pageMap[subPage.id] = id;
+					pages.push(new Promise(function (resolve, reject) {
+						resolve(id);
+					}));
+				})
+				.catch(() => {
+					// create
+					pages.push(client.createPage(subPage.name, '', result.id, function(result) {
+						pageMap[subPage.id] = result.id;
+					}));
+				});
+			}
+
+			Promise.all(pages).then(() => {
+
+				for (let sioId in pageMap) {
+					let confluenceId = pageMap[sioId];
+
+					page.html = page.html.replace(sioId, getConfluenceSubPageUrl(confluenceId));
+				}
+
+				let options = {
+					bare: true,
+					breakBeforeBr: true,
+					fixUri: true,
+					hideComments: true,
+					indent: true,
+					'output-xhtml': true,
+					'show-body-only': true
+				};
+
+				// Parse and fix HTML
+				tidy(page.html, options, function (err, parsedHtml) {
+					client.updatePage(
+						result.id,
+						parseInt(result.version.number, 10) + 1,
+						result.title,
+						parsedHtml,
+						function (result) {
+							console.log('Done upload');
+						}
+					);
+				});
+
+			});
+		}
+	);
 }
 
 run();
