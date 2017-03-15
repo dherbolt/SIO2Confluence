@@ -7,7 +7,8 @@
     "start": "node main.js",
 	"export": "node main.js",
     "import": "node importToConfluence.js",
-    "to-html": "node exporters/html/PageToHtml.js"
+    "to-html": "node exporters/html/PageToHtml.js",
+	"download-only": "node downloadOnly.js"
   },
   "repository": {
     "type": "git",
