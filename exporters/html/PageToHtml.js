@@ -3,6 +3,7 @@ const path = require('path');
 const APP_ROOT = __dirname + '/../..';
 const layoutParser = require(APP_ROOT + '/data-sources/sio/layoutParser');
 const addTable = require(__dirname + '/Table');
+const latinize = require(APP_ROOT + '/lib/Latinize').latinize;
 
 
 module.exports = function processPage (sourceFolder) {
@@ -15,7 +16,7 @@ module.exports = function processPage (sourceFolder) {
 
 	let body = [];
 	let page = {
-		title: pageCfg.name,
+		name: getConflunecePageName(pageCfg),
 		html: '',
 		attachments: [],
 		subPages: []
@@ -38,6 +39,10 @@ module.exports = function processPage (sourceFolder) {
 
 
 	let lastLayout;
+
+	function getConflunecePageName(page) {
+		return  (latinize(page.name) + ' sio:' + page.id).replace(/\s+/g, ' ').trim();
+	}
 
 	function addChild(node, html) {
 		if (node.layout && node.layout.column && node.layout.column !== lastLayout) {
@@ -103,7 +108,7 @@ module.exports = function processPage (sourceFolder) {
 		}
 		else if (node.type === 'Page') {
 			html.push(`<h3><a href="${node.id}">${node.name}</a></h3>`);
-			page.subPages.push(node);
+			page.subPages.push(Object.assign({}, node, {name: getConflunecePageName(node)}));
 		}
 		else if (node.type === 'LinkList') {
 			html.push(`<h2>Links</h2>`);

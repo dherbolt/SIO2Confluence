@@ -51,6 +51,7 @@ function download(pageId, parentDir) {
 			}
 
 			let page = {
+				id: sioPage.id,
 				name: sioPage.name,
 				layout: sioPage.layout,
 				children: processChildren(sioPage, coeId, dirName)

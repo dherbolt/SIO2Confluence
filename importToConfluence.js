@@ -37,36 +37,52 @@ function run() {
 
 
 	client.createOrUpdatePage(
-		page.title,
+		page.name,
 		'',
 		null, // start in root page defined in cfg
 		function (result) {
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
 				console.log('Upload attachment: ' + fileName);
-				client.uploadOrUpdateFile(page.title, fileName, `download/${sourceDir}/${fileName}`, function (attachment) {});
+				client.uploadOrUpdateFile(page.name, fileName, `download/${sourceDir}/${fileName}`, function (attachment) {});
 			}
 
 			let pages = [];
-			for (let subPage of page.subPages) {
+			let doneCallback;
+			let done = new Promise(function(resolve, reject) {
+				doneCallback = resolve;
+			});
+
+			const precessNexPage = function (index) {
+				let subPage = page.subPages[index];
+
+				if (!subPage) {
+					doneCallback();
+					return;
+				}
+
+				console.log(subPage.name + '/' + index);
+
 				let promise = client.getPageIdByTitle(subPage.name);
 
 				promise.then((id) => {
 					// ok - get id
 					pageMap[subPage.id] = id;
-					pages.push(new Promise(function (resolve, reject) {
-						resolve(id);
-					}));
+					pages.push(Promise.resolve(id));
+					precessNexPage(index + 1);
 				})
 				.catch(() => {
 					// create
 					pages.push(client.createPage(subPage.name, '', result.id, function(result) {
 						pageMap[subPage.id] = result.id;
+						precessNexPage(index + 1);
 					}));
 				});
-			}
+			};
 
-			Promise.all(pages).then(() => {
+			precessNexPage(0);
+
+			done.then(() => {
 
 				for (let sioId in pageMap) {
 					let confluenceId = pageMap[sioId];
