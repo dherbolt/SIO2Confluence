@@ -12,14 +12,14 @@ let client = new Confluence({
 	rootPage: cfg.confluence.targetPage
 });
 
-function run(sourceDir, parentPage, resolvePageUploaded) {
+module.exports = function run(sourceDir, parentPage, resolvePageUploaded) {
 	if (!cfg.confluence.targetSpace || !cfg.confluence.targetPage) {
 		throw 'Confluence space and/or page URL is not defined in config.json or it is in invalid format.';
 	}
 	parentPage = parentPage || null;
 
 	//let sourceDir = __dirname + '/download/10k-users-in-kerio-connect--58309038387064065';
-	sourceDir = sourceDir || (__dirname + '/download/daniel-herbolt--4507');
+	//sourceDir = sourceDir || (__dirname + '/download/daniel-herbolt--4507');
 
 	let page = processPage(sourceDir);
 
@@ -38,8 +38,8 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 
 	client.createOrUpdatePage(
 		page.name,
-		parentPage,
-		null, // start in root page defined in cfg
+		'',
+		parentPage, // start in root page defined in cfg
 		function (result) {
 			const parentPageId = result.id;
 			for (let fileName of page.attachments) {
@@ -113,7 +113,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 								const pageInfo = page.subPages[index];
 
 								if (!pageInfo) {
-									resolvePageUploaded();
+									resolvePageUploaded && resolvePageUploaded();
 									return;
 								}
 								console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
@@ -136,6 +136,4 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 	);
 }
 
-run(undefined, () => {
-	console.log('DONE - ALL UPLOADED');
-});
+//run();

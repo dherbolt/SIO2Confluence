@@ -10,7 +10,7 @@ const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 var pages = {};
 
-
+let rootDir;
 
 
 
@@ -42,6 +42,7 @@ function download(pageId, parentDir) {
 				console.log(`Cleaning ${dirName}`);
 				jetpack.remove(dirName);
 				dirName = `download/${dirName}`;
+				rootDir = dirName;
 			}
 			pages[sioPage.dashifiedName] = parentDir;
 
@@ -166,7 +167,7 @@ function downloadCallback(index, resolve) {
 		console.log(`Downloading file ${index} of ${files.length}`);
 		if (index + 1 === files.length) {
 			console.log('files download done');
-			resolve();
+			resolve({rootDir});
 			return;
 		}
 		downloadCallback(index + 1, resolve);

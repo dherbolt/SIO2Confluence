@@ -105,7 +105,7 @@ module.exports = function processPage (sourceFolder) {
 			pushDelmiter(html);
 		}
 		else if (node.type === 'File') {
-			html.push(`<a href="${node.file.name}">${node.name}</a>`);
+			html.push(`<div><a href="${node.file.name}">${node.name}</a></div>`);
 			page.attachments.push(node.file.name);
 		}
 		else if (node.type === 'Page') {
