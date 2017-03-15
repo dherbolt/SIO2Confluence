@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-	"export from SIO": "node exportFromSio.js",
-    "import to Confluence": "node importToConfluence.js",
+	"export-from-sio": "node exportFromSio.js",
+    "import-to-confluence": "node importToConfluence.js",
     "to-html": "node generateHtml.js",
 	"download-only": "node downloadOnly.js"
   },

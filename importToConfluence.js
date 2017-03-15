@@ -3,6 +3,7 @@ const jetpack = require('fs-jetpack');
 const tidy = require('htmltidy').tidy;
 const cfg = JSON.parse(jetpack.read('config.json'));
 const processPage = require('./exporters/html/PageToHtml');
+let argv = process.argv.slice(2);
 
 let client = new Confluence({
 	user: cfg.confluence.userName,
@@ -12,7 +13,7 @@ let client = new Confluence({
 	rootPage: cfg.confluence.targetPage
 });
 
-module.exports = function run(sourceDir, parentPage, resolvePageUploaded) {
+function run(sourceDir, parentPage, resolvePageUploaded) {
 	if (!cfg.confluence.targetSpace || !cfg.confluence.targetPage) {
 		throw 'Confluence space and/or page URL is not defined in config.json or it is in invalid format.';
 	}
@@ -134,6 +135,10 @@ module.exports = function run(sourceDir, parentPage, resolvePageUploaded) {
 			});
 		}
 	);
-}
+};
 
-//run();
+module.exports.importToConfluence = run;
+
+if (argv.length === 1) {
+	run(argv[0]);
+}

@@ -1,5 +1,5 @@
-const exportFromSio = require('./exportFromSio');
-const importToConfluence = require('./importToConfluence');
+const exportFromSio = require('./exportFromSio').exportFromSio;
+const importToConfluence = require('./importToConfluence').importToConfluence;
 
 function run () {
 	exportFromSio().then((args) => {
