@@ -4,21 +4,22 @@ const tidy = require('htmltidy').tidy;
 const cfg = JSON.parse(jetpack.read('config.json'));
 const processPage = require('./exporters/html/PageToHtml');
 
-function run() {
+let client = new Confluence({
+	user: cfg.confluence.userName,
+	password: cfg.confluence.password,
+	baseUrl: cfg.confluence.baseUrl,
+	space: cfg.confluence.targetSpace,
+	rootPage: cfg.confluence.targetPage
+});
+
+function run(sourceDir, parentPage, resolvePageUploaded) {
 	if (!cfg.confluence.targetSpace || !cfg.confluence.targetPage) {
 		throw 'Confluence space and/or page URL is not defined in config.json or it is in invalid format.';
 	}
-
-	let client = new Confluence({
-		user: cfg.confluence.userName,
-		password: cfg.confluence.password,
-		baseUrl: cfg.confluence.baseUrl,
-		space: cfg.confluence.targetSpace,
-		rootPage: cfg.confluence.targetPage
-	});
+	parentPage = parentPage || null;
 
 	//let sourceDir = __dirname + '/download/10k-users-in-kerio-connect--58309038387064065';
-	let sourceDir = __dirname + '/download/daniel-herbolt--4507';
+	sourceDir = sourceDir || (__dirname + '/download/daniel-herbolt--4507');
 
 	let page = processPage(sourceDir);
 
@@ -28,28 +29,28 @@ function run() {
 		return '/download/attachments/' + pageId + '/' + encodeURI(fileName);
 	};
 
-	const getConfluenceSubPageUrl = function(confluenceId) {
+	const getConfluenceSubPageUrl = function (confluenceId) {
 		return '/pages/viewpage.action?pageId=' + confluenceId;
 	};
 
 	// sio-id => confuluence-id
 	let pageMap = {};
 
-
 	client.createOrUpdatePage(
 		page.name,
-		'',
+		parentPage,
 		null, // start in root page defined in cfg
 		function (result) {
+			const parentPageId = result.id;
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
 				console.log('Upload attachment: ' + fileName);
-				client.uploadOrUpdateFile(page.name, fileName, `download/${sourceDir}/${fileName}`, function (attachment) {});
+				client.uploadOrUpdateFile(page.name, fileName, `download/${sourceDir}/${fileName}`, function (attachment) { });
 			}
 
-			let pages = [];
+			// let pages = [];
 			let doneCallback;
-			let done = new Promise(function(resolve, reject) {
+			let done = new Promise(function (resolve, reject) {
 				doneCallback = resolve;
 			});
 
@@ -63,21 +64,20 @@ function run() {
 
 				console.log(subPage.name + '/' + index);
 
-				let promise = client.getPageIdByTitle(subPage.name);
-
-				promise.then((id) => {
-					// ok - get id
-					pageMap[subPage.id] = id;
-					pages.push(Promise.resolve(id));
-					precessNexPage(index + 1);
-				})
-				.catch(() => {
-					// create
-					pages.push(client.createPage(subPage.name, '', result.id, function(result) {
-						pageMap[subPage.id] = result.id;
+				client.getPageIdByTitle(subPage.name)
+					.then((id) => {
+						// ok - get id
+						pageMap[subPage.id] = id;
+						// pages.push(Promise.resolve(id));
 						precessNexPage(index + 1);
-					}));
-				});
+					})
+					.catch(() => {
+						// create
+						client.createPage(subPage.name, '', result.id, function (result) {
+							pageMap[subPage.id] = result.id;
+							precessNexPage(index + 1);
+						});
+					});
 			};
 
 			precessNexPage(0);
@@ -108,7 +108,25 @@ function run() {
 						result.title,
 						parsedHtml,
 						function (result) {
-							console.log('Done upload');
+							console.log(`Page ${result.title} uploaded`);
+							const uploadSubPage = function (index) {
+								const pageInfo = page.subPages[index];
+								console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
+
+								if (!pageInfo) {
+									resolvePageUploaded();
+									return;
+								}
+
+								const dir = `${sourceDir}/${pageInfo.dashifiedName}--${pageInfo.id}`;
+								run(dir, parentPageId, function () {
+									console.log(`Subpage uploaded: ${pageInfo.dashifiedName}`);
+									uploadSubPage(index + 1);
+								});
+								jetpack.write(__dirname + '/download/subpage.txt', JSON.stringify(pageInfo, null, '\t'));
+							};
+
+							uploadSubPage(0);
 						}
 					);
 				});
@@ -118,4 +136,6 @@ function run() {
 	);
 }
 
-run();
+run(undefined, () => {
+	console.log('DONE - ALL UPLOADED');
+});
