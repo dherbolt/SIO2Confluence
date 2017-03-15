@@ -29,8 +29,10 @@ module.exports = function processPage (sourceFolder) {
 	//	console.log(pageLayout);
 		}
 
-		for (let child of node.children) {
-			html.push(addChild(child, html));
+		if (node.children) {
+			for (let child of node.children) {
+				html.push(addChild(child, html));
+			}
 		}
 		if (lastLayout && isRoot) {
 			body.push(`</div></div>`);
@@ -81,7 +83,7 @@ module.exports = function processPage (sourceFolder) {
 		else if (node.type === 'Images') {
 			// console.log(node.children[0].file);
 			html.push(`<h2>${node.name}</h2>`);
-			addChildren(node, html);
+			node.children && addChildren(node, html);
 			pushDelmiter(html);
 		}
 		else if (node.type === 'File' && node.file.properties.imageFormat) {
@@ -99,7 +101,7 @@ module.exports = function processPage (sourceFolder) {
 
 		else if (node.type === 'FileLib') {
 			html.push(`<h2>Files</h2>`);
-			addChildren(node, html);
+			node.children && addChildren(node, html);
 			pushDelmiter(html);
 		}
 		else if (node.type === 'File') {
