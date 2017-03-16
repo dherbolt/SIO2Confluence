@@ -25,8 +25,6 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 
 	let page = processPage(sourceDir);
 
-	jetpack.write('out.txt', JSON.stringify(page, null, '\t'));
-
 	const getFileLink = function (pageId, fileName) {
 		return '/download/attachments/' + pageId + '/' + encodeURI(fileName);
 	};
@@ -44,12 +42,17 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 		parentPage, // start in root page defined in cfg
 		function (result) {
 			const parentPageId = result.id;
+			let fileUploads = [];
+
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
 				console.log('Upload attachment: ' + fileName);
-				client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
-					console.log('File ' + attachment.title + 'uploaded successfully.');
-				});
+				fileUploads.push(new Promise(function (resolve, reject) {
+					client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
+						resolve(attachment);
+						console.log('File ' + attachment.title + 'uploaded successfully.');
+					});
+				}));
 			}
 
 			// let pages = [];
@@ -105,36 +108,41 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 				};
 
 				// Parse and fix HTML
-				tidy(page.html, options, function (err, parsedHtml) {
-					client.updatePage(
-						result.id,
-						parseInt(result.version.number, 10) + 1,
-						result.title,
-						parsedHtml,
-						function (result) {
-							console.log(`Page ${result.title} uploaded`);
-							const uploadSubPage = function (index) {
-								const pageInfo = page.subPages[index];
+				let parsePromise = new Promise(function (resolve, reject) {
+					tidy(page.html, options, function (err, parsedHtml) {
+						client.updatePage(
+							result.id,
+							parseInt(result.version.number, 10) + 1,
+							result.title,
+							parsedHtml,
+							function (result) {
+								console.log(`Page ${result.title} uploaded`);
+								const uploadSubPage = function (index) {
+									const pageInfo = page.subPages[index];
 
-								if (!pageInfo) {
-									resolvePageUploaded && resolvePageUploaded();
-									return;
-								}
-								console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
+									if (!pageInfo) {
+										resolve()
+										return;
+									}
+									console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
 
-								const dir = `${sourceDir}/${pageInfo.dashifiedName}--${pageInfo.id}`;
-								run(dir, parentPageId, function () {
-									console.log(`Subpage uploaded: ${pageInfo.dashifiedName}`);
-									uploadSubPage(index + 1);
-								});
-								jetpack.write(__dirname + '/download/subpage.txt', JSON.stringify(pageInfo, null, '\t'));
-							};
+									const dir = `${sourceDir}/${pageInfo.dashifiedName}--${pageInfo.id}`;
+									run(dir, parentPageId, function () {
+										console.log(`Subpage uploaded: ${pageInfo.dashifiedName}`);
+										uploadSubPage(index + 1);
+									});
+									jetpack.write(__dirname + '/download/subpage.txt', JSON.stringify(pageInfo, null, '\t'));
+								};
 
-							uploadSubPage(0);
-						}
-					);
+								uploadSubPage(0);
+							}
+						);
+					});
 				});
 
+				Promise.all(fileUploads.concat(parsePromise)).then(() => {
+					resolvePageUploaded && resolvePageUploaded();
+				});
 			});
 		}
 	);

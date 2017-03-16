@@ -164,7 +164,7 @@ function downloadAllFiles(resolve) {
 function downloadCallback(index, resolve) {
 	console.assert(resolve);
 	downloadFile(files[index]).then(function() {
-		console.log(`Downloading file ${index} of ${files.length}`);
+		console.log(`Downloading file ${index + 1} of ${files.length}`);
 		if (index + 1 === files.length) {
 			console.log('files download done');
 			resolve({rootDir});
