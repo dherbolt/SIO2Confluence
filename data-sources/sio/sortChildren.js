@@ -10,14 +10,28 @@ function sortChildren(page) {
 function sortChildrenInternal(node) {
 	let columns = layoutParser(node);
 	let children = [];
+	let colChildren;
 
 	for (let columnName of columnOrder) {
-		if (columns[columnName]) {
-			children = children.concat(columns[columnName]);
+		colChildren = columns[columnName];
+		if (colChildren) {
+			colChildren = cleanArray(colChildren);  // remove undefined values (fixed sio layout)
+			children = children.concat(colChildren);
 		}
 	}
 
 	return children;
 }
+
+function cleanArray(actual) {
+	var i, newArray = new Array();
+	for (i = 0; i < actual.length; i++) {
+		if (actual[i]) {
+			newArray.push(actual[i]);
+		}
+	}
+	return newArray;
+}
+
 
 module.exports = sortChildren;

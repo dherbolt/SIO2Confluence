@@ -26,7 +26,7 @@ function run(sourcePageUrl) {
 
 			auth.info.tenant = body.result.bootstrapData.tenant;
 			auth.info.user = body.result.bootstrapData.user;
-			
+
 			let pageId;
 			sourcePageUrl = sourcePageUrl || cfg.sio.sourcePageUrl;
 
@@ -44,7 +44,7 @@ function run(sourcePageUrl) {
 
 			return page.download(pageId);
 		});
-};
+}
 
 module.exports.exportFromSio = run;
 

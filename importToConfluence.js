@@ -145,7 +145,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 			});
 		}
 	);
-};
+}
 
 module.exports.importToConfluence = run;
 
