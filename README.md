@@ -1,5 +1,5 @@
 # SIO2Confluence
-Script for migration of [Samepage.io](https://samepage.io) spaces into [Atlassina Confluence](https://www.atlassian.com/software/confluence).
+Script for migration from [Samepage.io](https://samepage.io) spaces into [Atlassina Confluence](https://www.atlassian.com/software/confluence).
 Legacy Samepage.io is only supported.
 
 ## Usage
