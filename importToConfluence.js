@@ -46,16 +46,15 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
-				console.log('Upload attachment: ' + fileName);
+				console.log(`Uploading file '${fileName}'...`);
 				fileUploads.push(new Promise(function (resolve, reject) {
 					client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
 						resolve(attachment);
-						console.log('File ' + attachment.title + 'uploaded successfully.');
+						console.log(`File '${attachment.title}' uploaded successfully.`);
 					});
 				}));
 			}
 
-			// let pages = [];
 			let doneCallback;
 			let done = new Promise(function (resolve, reject) {
 				doneCallback = resolve;
