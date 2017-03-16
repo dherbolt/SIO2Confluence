@@ -43,7 +43,7 @@ module.exports = function processPage (sourceFolder) {
 	let lastLayout;
 
 	function getConflunecePageName(page) {
-		return  (latinize(page.name) + ' sio:' + page.id).replace(/\s+/g, ' ').trim();
+		return  (latinize(page.name) + ' sid:' + page.id + ':sid').replace(/\s+/g, ' ').trim();
 	}
 
 	function addChild(node, html) {
