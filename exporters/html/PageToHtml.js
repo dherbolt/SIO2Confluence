@@ -4,7 +4,7 @@ const APP_ROOT = __dirname + '/../..';
 const layoutParser = require(APP_ROOT + '/data-sources/sio/layoutParser');
 const addTable = require(__dirname + '/Table');
 const latinize = require(APP_ROOT + '/lib/Latinize').latinize;
-
+const linkColor = '#00adef';
 
 module.exports = function processPage (sourceFolder) {
 	const useLayouts = true;
@@ -75,8 +75,10 @@ module.exports = function processPage (sourceFolder) {
 		}
 
 		if (node.type === 'TextNote') {
+			let value = (node.value || '').replace(/<p>/gi, '<p style="margin: 0;">');
+
 			html.push(`<h2>${node.name}</h2>`);
-			html.push(`<div>${node.value || ''}</div>`);
+			html.push(`<div>${value}</div>`);
 			pushDelmiter(html);
 		}
 
@@ -105,11 +107,11 @@ module.exports = function processPage (sourceFolder) {
 			pushDelmiter(html);
 		}
 		else if (node.type === 'File') {
-			html.push(`<div><a href="${node.file.name}">${node.name}</a></div>`);
+			html.push(`<div><a style="color:${linkColor};" href="${node.file.name}">${node.name}</a></div>`);
 			page.attachments.push(node.file.name);
 		}
 		else if (node.type === 'Page') {
-			html.push(`<h3><a href="${node.id}">${node.name}</a></h3>`);
+			html.push(`<h3><a style="color:${linkColor};" href="${node.id}">${node.name}</a></h3>`);
 			page.subPages.push(Object.assign({}, node, {name: getConflunecePageName(node)}));
 		}
 		else if (node.type === 'LinkList') {
@@ -118,7 +120,7 @@ module.exports = function processPage (sourceFolder) {
 			pushDelmiter(html);
 		}
 		else if (node.type === "Link") {
-			html.push(`<div><a href="${node.value}">${node.name}</a></div>`);
+			html.push(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
 		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
