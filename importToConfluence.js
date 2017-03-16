@@ -47,7 +47,9 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
 				console.log('Upload attachment: ' + fileName);
-				client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) { });
+				client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
+					console.log('File ' + attachment.title + 'uploaded successfully.');
+				});
 			}
 
 			// let pages = [];

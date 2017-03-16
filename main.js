@@ -6,12 +6,14 @@ const importToConfluence = require('./importToConfluence').importToConfluence;
 const argv = process.argv.slice(2);
 
 function run (sourcePageUrl, targetPageName) {
-
+	console.log('Exporting from SIO...');
 	exportFromSio(sourcePageUrl).then((args) => {
-		console.log('Downloaded -- ALL DONE');
 		let {rootDir} = args;
+		console.log('DONE -- All downloaded in ' + rootDir);
+		
+		console.log('Posting to Confluence...');
 		importToConfluence(__dirname + '/' + rootDir, targetPageName, () => {
-			console.log('DONE - ALL UPLOADED');
+			console.log('DONE -- All uploaded');
 		});
 	});
 }
