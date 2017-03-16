@@ -3,6 +3,7 @@ const jetpack = require('fs-jetpack');
 const tidy = require('htmltidy').tidy;
 const cfg = JSON.parse(jetpack.read('config.json'));
 const processPage = require('./exporters/html/PageToHtml');
+const path = require('path');
 let argv = process.argv.slice(2);
 
 let client = new Confluence({
@@ -139,6 +140,6 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 
 module.exports.importToConfluence = run;
 
-if (argv.length === 1) {
+if (argv.length && path.normalize(process.argv[1]) === __filename) {
 	run(argv[0]);
 }

@@ -3,6 +3,7 @@ const page = require(__dirname + '/data-sources/sio/page');
 const sendXhr = require(__dirname + '/sendXhr');
 const auth = require(__dirname + '/auth');
 const cfg = JSON.parse(jetpack.read('config.json'));
+const path = require('path');
 let argv = process.argv.slice(2);
 
 function bootstrap(callback) {
@@ -12,7 +13,7 @@ function bootstrap(callback) {
 	}, callback);
 }
 
-function run() {
+function run(sourcePageUrl) {
 	return auth.doLogin(cfg.sio.userName, cfg.sio.password)
 		.then(function (res) {return bootstrap();})
 		.then(function (args) {
@@ -27,14 +28,7 @@ function run() {
 			auth.info.user = body.result.bootstrapData.user;
 			
 			let pageId;
-			let sourcePageUrl;
-
-			if (1 === argv.length) {
-				sourcePageUrl = argv[0];
-			}
-			else {
-				sourcePageUrl = cfg.sio.sourcePageUrl;
-			}
+			sourcePageUrl = sourcePageUrl || cfg.sio.sourcePageUrl;
 
 			if (sourcePageUrl) {
 				let parts = sourcePageUrl.match(/\/page-(\d+?)-.*/i);
@@ -54,6 +48,6 @@ function run() {
 
 module.exports.exportFromSio = run;
 
-if (argv.length) {
-	run();
+if (argv.length && path.normalize(process.argv[1]) === __filename) {
+	run(argv[0]);
 }
