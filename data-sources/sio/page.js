@@ -134,7 +134,7 @@ function parseFile(node, coeId, dirPath) {
 	if (!node.file) {
 		return;
 	}
-	addFile(coeId, node.id, `${dirPath}/${node.name}`);
+	addFile(coeId, node.id, `${dirPath}/${node.file.name}`);
 	let file = node.file;
 	return {
 		name: file.name,
