@@ -8,6 +8,7 @@ module.exports = function parseColumns(page) {
 	}
 	for (let child of page.children) {
 		let layout = child.layout;
+
 		if (layout && layout.column) {
 			columns[layout.column] = columns[layout.column] || [];
 			columns[layout.column][layout.position] = child;

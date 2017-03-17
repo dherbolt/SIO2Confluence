@@ -10,7 +10,7 @@ let info = {
 	token: null,
 	reqId: 1,
 	tenant: undefined,
-	user: undefined,
+	user: undefined
 };
 
 

@@ -56,11 +56,13 @@ function download(pageId, parentDir) {
 				id: sioPage.id,
 				name: sioPage.name,
 				layout: sioPage.layout,
-				children: processChildren(sioPage, coeId, dirName)
+				children: processChildren(sioPage, coeId, dirName),
+				value: (sioPage.value && sioPage.value.text) || '',
+				isNewSio: !!sioPage.teamContainer
 			};
 
 			page = sortChildren(page);
-
+			
 			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
 			jetpack.write(`${dirName}/page.json`, JSON.stringify(page, null, '\t'));
 
@@ -105,9 +107,11 @@ function processChildren(node, coeId, dirPath) {
 	if (!node.children) {
 		return undefined;
 	}
+
 	for (let child of node.children) {
 		children.push(processChild(child, coeId, dirPath));
 	}
+
 	children = children.length ? children : undefined;
 	return children;
 }

@@ -33,7 +33,7 @@ function run(sourcePageUrl) {
 			sourcePageUrl = sourcePageUrl || cfg.sio.sourcePageUrl;
 
 			if (sourcePageUrl) {
-				let parts = sourcePageUrl.match(/\/page-(\d+?)-.*/i);
+				let parts = sourcePageUrl.match(/\/page-(\d+)-?.*/i);
 
 				if (parts.length === 2) {
 					pageId = parts[1];
@@ -41,10 +41,13 @@ function run(sourcePageUrl) {
 			}
 
 			if (!pageId) {
+				Logger.error('Source page url is not defined in config.json');
 				throw 'Source page url is not defined in config.json';
 			}
 
 			return page.download(pageId);
+		}).catch(function (err) {
+			Logger.log('ERROR: ', err);
 		});
 }
 

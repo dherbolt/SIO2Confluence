@@ -5,6 +5,8 @@ const layoutParser = require(APP_ROOT + '/data-sources/sio/layoutParser');
 const addTable = require(__dirname + '/Table');
 const latinize = require(APP_ROOT + '/lib/Latinize').latinize;
 const linkColor = '#00adef';
+let newSioComponentsHtml = [];
+let cmpIndex = 0;
 
 module.exports = function processPage (sourceFolder) {
 	const useLayouts = true;
@@ -27,7 +29,7 @@ module.exports = function processPage (sourceFolder) {
 	function addChildren(node, html, isRoot) {
 		if (isRoot) {
 			pageLayout = node.layout && node.layout.columns;
-	//	Logger.log(pageLayout);
+			html.push(node.value || '');
 		}
 
 		if (node.children) {
@@ -93,7 +95,8 @@ module.exports = function processPage (sourceFolder) {
 			let imgInfo = node.file.properties;
 			// html.push(JSON.stringify(node));
 			let style =	"max-width: 100%; height: auto !important;";
-			html.push(`<div> <img style="${style}" src="${node.file.name}" width="${imgInfo.imageSize.width}" height="${imgInfo.imageSize.height}" /> </div>`);
+			renderCmp(`<div style="${pageCfg.isNewSio ? 'text-align: center' : ''}"> <img style="${style}" src="${node.file.name}" width="${imgInfo.imageSize.width}" height="${imgInfo.imageSize.height}" /> </div>`);
+
 			page.attachments.push(node.file.name);
 		}
 
@@ -108,11 +111,11 @@ module.exports = function processPage (sourceFolder) {
 			pushDelmiter(html);
 		}
 		else if (node.type === 'File') {
-			html.push(`<div><a style="color:${linkColor};" href="${node.file.name}">${node.name}</a></div>`);
+			renderCmp(`<div><a style="color:${linkColor};" href="${node.file.name}">${node.name}</a></div>`);
 			page.attachments.push(node.file.name);
 		}
 		else if (node.type === 'Page') {
-			html.push(`<h3><a style="color:${linkColor};" href="${node.id}">${node.name}</a></h3>`);
+			renderCmp(`<h3><a style="color:${linkColor};" href="${node.id}">${node.name}</a></h3>`);
 			page.subPages.push(Object.assign({}, node, {name: getConflunecePageName(node)}));
 		}
 		else if (node.type === 'LinkList') {
@@ -121,7 +124,7 @@ module.exports = function processPage (sourceFolder) {
 			pushDelmiter(html);
 		}
 		else if (node.type === "Link") {
-			html.push(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
+			renderCmp(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
 		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
@@ -133,10 +136,28 @@ module.exports = function processPage (sourceFolder) {
 	}
 
 
+	function renderCmp(htmlCmp, append) {
+		newSioComponentsHtml[cmpIndex] = (newSioComponentsHtml[cmpIndex] || '') + htmlCmp;
+		cmpIndex++;
+
+		body.push(htmlCmp);
+	}
+
 
 	addChildren(pageCfg, body, true);
 
-	body = body.join('');
+	if (pageCfg.isNewSio) {
+		body = pageCfg.value;
+		
+		for (let cmp of newSioComponentsHtml) {
+			body = body.replace('~', cmp);
+		}
+
+		body = `<div style="min-width: 430px; max-width: 812px; margin-left: auto; margin-right: auto;">${body}</div>`;
+	}
+	else {
+		body = body.join('');
+	}
 
 
 	page.html = `

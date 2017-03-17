@@ -3,6 +3,10 @@ const jetpack = require('fs-jetpack');
 const columnOrder = JSON.parse(jetpack.read(__dirname + '/../../config.json')).sio.columnOrder;
 
 function sortChildren(page) {
+	if (page.isNewSio) {
+		return page;
+	}
+	
 	page.children = sortChildrenInternal(page);
 	return page;
 }
