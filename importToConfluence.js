@@ -5,6 +5,8 @@ const cfg = JSON.parse(jetpack.read('config.json'));
 const processPage = require('./exporters/html/PageToHtml');
 const path = require('path');
 let argv = process.argv.slice(2);
+let sio2confMap;
+let logFileName = './logs/sio2conf.json';
 
 let client = new Confluence({
 	user: cfg.confluence.userName,
@@ -13,6 +15,8 @@ let client = new Confluence({
 	space: cfg.confluence.targetSpace,
 	rootPage: cfg.confluence.targetPage
 });
+
+sio2confMap = jetpack.read(logFileName, 'json') || {};
 
 function run(sourceDir, parentPage, resolvePageUploaded) {
 	if (!cfg.confluence.targetSpace || !cfg.confluence.targetPage) {
@@ -40,6 +44,8 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 		function (result) {
 			const parentPageId = result.id;
 			let fileUploads = [];
+
+			sio2confMap[page.id] = parentPageId;
 
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
@@ -70,13 +76,14 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 				client.getPageIdByTitle(subPage.name)
 					.then((id) => {
 						// ok - get id
+						sio2confMap[subPage.id] = id;
 						pageMap[subPage.id] = id;
-						// pages.push(Promise.resolve(id));
 						processNextPage(index + 1);
 					})
 					.catch(() => {
 						// create
 						client.createPage(subPage.name, '', result.id, function (result) {
+							sio2confMap[subPage.id] = result.id;
 							pageMap[subPage.id] = result.id;
 							processNextPage(index + 1);
 						});
@@ -117,7 +124,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 									const pageInfo = page.subPages[index];
 
 									if (!pageInfo) {
-										resolve()
+										resolve();
 										return;
 									}
 									console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
@@ -137,6 +144,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 				});
 
 				Promise.all(fileUploads.concat(parsePromise)).then(() => {
+					jetpack.write(logFileName, JSON.stringify(sio2confMap, null, '\t'), {atomic: true});
 					resolvePageUploaded && resolvePageUploaded();
 				});
 			});

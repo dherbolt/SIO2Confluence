@@ -19,7 +19,8 @@ module.exports = function processPage (sourceFolder) {
 		name: getConflunecePageName(pageCfg),
 		html: '',
 		attachments: [],
-		subPages: []
+		subPages: [],
+		id: pageCfg.id
 	};
 	let pageLayout;
 
