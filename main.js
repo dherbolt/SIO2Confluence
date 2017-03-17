@@ -10,7 +10,7 @@ function run (sourcePageUrl, targetPageName) {
 	exportFromSio(sourcePageUrl).then((args) => {
 		let {rootDir} = args;
 		console.log('DONE -- All downloaded in ' + rootDir);
-		
+
 		console.log('Posting to Confluence...');
 		importToConfluence(__dirname + '/' + rootDir, targetPageName, () => {
 			console.log('DONE -- All uploaded');

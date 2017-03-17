@@ -20,9 +20,6 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 	}
 	parentPage = parentPage || null;
 
-	//let sourceDir = __dirname + '/download/10k-users-in-kerio-connect--58309038387064065';
-	//sourceDir = sourceDir || (__dirname + '/download/daniel-herbolt--4507');
-
 	let page = processPage(sourceDir);
 
 	const getFileLink = function (pageId, fileName) {
@@ -60,7 +57,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 				doneCallback = resolve;
 			});
 
-			const precessNexPage = function (index) {
+			const processNextPage = function (index) {
 				let subPage = page.subPages[index];
 
 				if (!subPage) {
@@ -75,18 +72,18 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 						// ok - get id
 						pageMap[subPage.id] = id;
 						// pages.push(Promise.resolve(id));
-						precessNexPage(index + 1);
+						processNextPage(index + 1);
 					})
 					.catch(() => {
 						// create
 						client.createPage(subPage.name, '', result.id, function (result) {
 							pageMap[subPage.id] = result.id;
-							precessNexPage(index + 1);
+							processNextPage(index + 1);
 						});
 					});
 			};
 
-			precessNexPage(0);
+			processNextPage(0);
 
 			done.then(() => {
 
