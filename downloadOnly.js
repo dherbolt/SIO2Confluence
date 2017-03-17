@@ -29,7 +29,7 @@ function run() {
 			auth.info.user = body.result.bootstrapData.user;
 
 			if (cfg.sio.sourcePageUrl) {
-				let parts = cfg.sio.sourcePageUrl.match(/\/page-(\d+?)-.*/i);
+				let parts = cfg.sio.sourcePageUrl.match(/\/page-(\d+)-?.*/i);
 
 				if (parts.length === 2) {
 					pageId = parts[1];
