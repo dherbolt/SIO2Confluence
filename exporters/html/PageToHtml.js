@@ -101,7 +101,9 @@ module.exports = function processPage (sourceFolder) {
 		}
 
 		else if (node.type === 'Table') {
-			addTable(node, html);
+			let cmpHtml = [];
+			addTable(node, cmpHtml);
+			renderCmp(cmpHtml.join(''));
 			pushDelmiter(html);
 		}
 
@@ -148,7 +150,7 @@ module.exports = function processPage (sourceFolder) {
 
 	if (pageCfg.isNewSio) {
 		body = pageCfg.value;
-		
+
 		for (let cmp of newSioComponentsHtml) {
 			body = body.replace('~', cmp);
 		}
