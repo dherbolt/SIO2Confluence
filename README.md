@@ -1,6 +1,5 @@
 # SIO2Confluence
-Script for migration from [Samepage.io](https://samepage.io) spaces into [Atlassina Confluence](https://www.atlassian.com/software/confluence).
-Legacy Samepage.io is only supported.
+Script for migration from [Samepage.io](https://samepage.io) into [Atlassina Confluence](https://www.atlassian.com/software/confluence).
 
 ## Prerequisites
 You need a [Git](https://git-scm.com/downloads) client and [Node.JS](https://nodejs.org/en/download/) installed on your computer.
