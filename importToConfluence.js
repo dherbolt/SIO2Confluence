@@ -9,6 +9,7 @@ const path = require('path');
 let argv = process.argv.slice(2);
 let sio2confMap;
 let logFileName = './logs/sio2conf.json';
+let confIdToNameMap = {};
 
 let client = new Confluence({
 	user: cfg.confluence.userName,
@@ -48,6 +49,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 			let fileUploads = [];
 
 			sio2confMap[page.id] = parentPageId;
+			confIdToNameMap[parentPageId] = page.name;
 
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
@@ -80,6 +82,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 						// ok - get id
 						sio2confMap[subPage.id] = id;
 						pageMap[subPage.id] = id;
+						confIdToNameMap[id] = page.name;
 						processNextPage(index + 1);
 					})
 					.catch(() => {
@@ -147,11 +150,47 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 
 				Promise.all(fileUploads.concat(parsePromise)).then(() => {
 					jetpack.write(logFileName, JSON.stringify(sio2confMap, null, '\t'), {atomic: true});
-					resolvePageUploaded && resolvePageUploaded();
+
+					renamePages(confIdToNameMap).then(() => {
+						resolvePageUploaded && resolvePageUploaded();
+					});
 				});
 			});
 		}
 	);
+}
+
+/**
+ * Fails on "bad request"
+ * @param {} confIdToNameMap
+ */
+function renamePages(confIdToNameMap) {
+	return new Promise(function(resolve, reject) {
+		let counter = 0;
+		let done = 0;
+		for (let confId in confIdToNameMap) {
+			console.log(confIdToNameMap);
+			let confName = confIdToNameMap[confId];
+			let pageName = confName.replace(/sid\:.*\:sid/, '').trim();
+			counter++;
+			client.getPageById(confId, function(data) {
+				let version = +data.version.number + 1;
+				// pageId, version, pageTitle, body, callback
+				console.log(`Renaming page: ${pageName}  #${confId}  ${version}   bad reuest ==> page already exists`);
+				let html = data.body.storage.value;
+
+				client.updatePage(confId, version, pageName, html, function() {
+					done++;
+					console.log(`Renaming done ${done}/${counter}`);
+
+					if (done === counter) {
+						resolve();
+					}
+				});
+
+			});
+		}
+	});
 }
 
 module.exports.importToConfluence = run;

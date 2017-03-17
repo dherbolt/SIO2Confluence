@@ -1,11 +1,12 @@
 {
-	"extends": 'eslint:recommended',
+	"extends": "eslint:recommended",
 	"rules": {
 		"no-unused-vars": [2, {"vars": "all", "args": "none"}],
 		"no-console": 0,
 		"semi": 2
 	},
 	"globals": {
+		"Logger": true
 	},
 	"env": {
 		"es6": true,
