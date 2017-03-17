@@ -5,6 +5,8 @@ const page = require(__dirname + '/data-sources/sio/page');
 const sendXhr = require(__dirname + '/sendXhr');
 const auth = require(__dirname + '/auth');
 const cfg = JSON.parse(jetpack.read('config.json'));
+const path = require('path');
+let argv = process.argv.slice(2);
 
 function bootstrap(callback) {
 	sendXhr('Bootstrap.bootstrap', {
@@ -14,7 +16,7 @@ function bootstrap(callback) {
 }
 
 
-function run() {
+function run(sourcePageUrl) {
 
 	auth.doLogin(cfg.sio.userName, cfg.sio.password, function () {
 		bootstrap(function (args) {
@@ -28,8 +30,10 @@ function run() {
 			auth.info.tenant = body.result.bootstrapData.tenant;
 			auth.info.user = body.result.bootstrapData.user;
 
-			if (cfg.sio.sourcePageUrl) {
-				let parts = cfg.sio.sourcePageUrl.match(/\/page-(\d+)-?.*/i);
+			sourcePageUrl = sourcePageUrl || cfg.sio.sourcePageUrl;
+
+			if (sourcePageUrl) {
+				let parts = sourcePageUrl.match(/\/page-(\d+)-?.*/i);
 
 				if (parts.length === 2) {
 					pageId = parts[1];
@@ -39,8 +43,6 @@ function run() {
 			if (!pageId) {
 				throw 'Source page url is not defined in config.json';
 			}
-
-			pageId = '181462';
 
 			page.getContent(pageId).then((args) => {
 				let { error, response, body } = args;
@@ -53,4 +55,6 @@ function run() {
 	});
 }
 
-run();
+if (argv.length && path.normalize(process.argv[1]) === __filename) {
+	run(argv[0]);
+}
