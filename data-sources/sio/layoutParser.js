@@ -16,7 +16,7 @@ module.exports = function parseColumns(page) {
 
 
 	for (let columnName in columns) {
-		//console.log('layout column: ' + columnName);
+		//Logger.log('layout column: ' + columnName);
 		console.assert(columnOrder.indexOf(columnName) >= 0);
 		//let items = columns[columnName];
 	}

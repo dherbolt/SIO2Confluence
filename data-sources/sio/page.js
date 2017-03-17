@@ -21,7 +21,7 @@ function download(pageId, parentDir) {
 		// 	url: 'https://samepage.io/72f3728084841d1a9db65c44335a41d27bfa96c2/file/401469089400651104',
 		// 	path: 'download/__test---about-diaolog-final-spec-png'
 		// }).then(function () {
-		// 	console.log('----------------------');
+		// 	Logger.log('----------------------');
 		// });
 		// return;
 
@@ -30,8 +30,8 @@ function download(pageId, parentDir) {
 			let { error, response, body } = args;
 
 			if (body.error) {
-				console.error(`ERROR: ID: ${pageId} -- ${JSON.stringify(body.error)}`);
-				console.error('Page cannot be downloaded!');
+				Logger.error(`ERROR: ID: ${pageId} -- ${JSON.stringify(body.error)}`);
+				Logger.error('Page cannot be downloaded!');
 				return;
 			}
 
@@ -40,14 +40,14 @@ function download(pageId, parentDir) {
 			let coeId = sioPage.coeRoomId.split('/')[0];
 
 			if (!parentDir) {
-				console.log(`Cleaning ${dirName}`);
+				Logger.log(`Cleaning ${dirName}`);
 				jetpack.remove(dirName);
 				dirName = `download/${dirName}`;
 				rootDir = dirName;
 			}
 			pages[sioPage.dashifiedName] = parentDir;
 
-			console.log(`Downloaded ${sioPage.dashifiedName} --> ${pageId}`);
+			Logger.log(`Downloaded ${sioPage.dashifiedName} --> ${pageId}`);
 			if (parentDir) {
 				dirName = `${parentDir}/${dirName}`;
 			}
@@ -165,9 +165,9 @@ function downloadAllFiles(resolve) {
 function downloadCallback(index, resolve) {
 	console.assert(resolve);
 	downloadFile(files[index]).then(function() {
-		console.log(`Downloading file ${index + 1} of ${files.length}`);
+		Logger.log(`Downloading file ${index + 1} of ${files.length}`);
 		if (index + 1 === files.length) {
-			console.log('files download done');
+			Logger.log('files download done');
 			resolve({rootDir});
 			return;
 		}
@@ -189,9 +189,9 @@ function downloadFile(file, callback) {
 			gzip: true,
 		};
 		request.head(option, function (err, res, body) {
-			console.log('content-type:', res.headers['content-type']);
-			console.log('content-length:', res.headers['content-length']);
-			console.log('write to ' + path);
+			Logger.log('content-type:', res.headers['content-type']);
+			Logger.log('content-length:', res.headers['content-length']);
+			Logger.log('write to ' + path);
 
 			request(option).pipe(fs.createWriteStream(path)).on('close', resolve);
 		});

@@ -1,3 +1,5 @@
+require('./common.js');
+
 const jetpack = require('fs-jetpack');
 const page = require(__dirname + '/data-sources/sio/page');
 const sendXhr = require(__dirname + '/sendXhr');
@@ -20,7 +22,7 @@ function run(sourcePageUrl) {
 			let { response, body } = args;
 
 			if (!body.result.bootstrapData) {
-				console.log('Login failed!');
+				Logger.log('Login failed!');
 				process.exit(1);
 			}
 

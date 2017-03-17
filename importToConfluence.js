@@ -1,3 +1,5 @@
+require('./common.js');
+
 const Confluence = require('./lib/Confluence');
 const jetpack = require('fs-jetpack');
 const tidy = require('htmltidy').tidy;
@@ -49,11 +51,11 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 
 			for (let fileName of page.attachments) {
 				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
-				console.log(`Uploading file '${fileName}'...`);
+				Logger.log(`Uploading file '${fileName}'...`);
 				fileUploads.push(new Promise(function (resolve, reject) {
 					client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
 						resolve(attachment);
-						console.log(`File '${attachment.title}' uploaded successfully.`);
+						Logger.log(`File '${attachment.title}' uploaded successfully.`);
 					});
 				}));
 			}
@@ -71,7 +73,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 					return;
 				}
 
-				console.log(subPage.name + '/' + index);
+				Logger.log(subPage.name + '/' + index);
 
 				client.getPageIdByTitle(subPage.name)
 					.then((id) => {
@@ -119,7 +121,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 							result.title,
 							parsedHtml,
 							function (result) {
-								console.log(`Page ${result.title} uploaded`);
+								Logger.log(`Page ${result.title} uploaded`);
 								const uploadSubPage = function (index) {
 									const pageInfo = page.subPages[index];
 
@@ -127,11 +129,11 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 										resolve();
 										return;
 									}
-									console.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
+									Logger.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
 
 									const dir = `${sourceDir}/${pageInfo.dashifiedName}--${pageInfo.id}`;
 									run(dir, parentPageId, function () {
-										console.log(`Subpage uploaded: ${pageInfo.dashifiedName}`);
+										Logger.log(`Subpage uploaded: ${pageInfo.dashifiedName}`);
 										uploadSubPage(index + 1);
 									});
 									jetpack.write(__dirname + '/download/subpage.txt', JSON.stringify(pageInfo, null, '\t'));

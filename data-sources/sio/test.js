@@ -6,7 +6,7 @@ let pageRootPath = path.normalize(__dirname + '/../../download/10k-users-in-keri
 let outPath = pageRootPath + '/page-sorted.json';
 const pageJson = pageRootPath + '/page.json';
 
-console.log(`> Reading ${pageJson}...`);
+Logger.log(`> Reading ${pageJson}...`);
 let page = JSON.parse(jetpack.read(pageJson));
 
 sortChildren(page);

@@ -1,3 +1,5 @@
+require('./common.js');
+
 const jetpack = require('fs-jetpack');
 const page = require(__dirname + '/data-sources/sio/page');
 const sendXhr = require(__dirname + '/sendXhr');
@@ -19,7 +21,7 @@ function run() {
 			let { error, response, body } = args;
 
 			if (!body.result.bootstrapData) {
-				console.log('Login failed!');
+				Logger.log('Login failed!');
 				process.exit(1);
 			}
 
@@ -44,8 +46,8 @@ function run() {
 				let { error, response, body } = args;
 				var page = body.result.page;
 				jetpack.write(`download/${pageId}/page.json`, JSON.stringify(page, null, '\t'));
-				console.log(`Output: download/${pageId}/page.json`);
-				console.log('Done.');
+				Logger.log(`Output: download/${pageId}/page.json`);
+				Logger.log('Done.');
 			});
 		});
 	});

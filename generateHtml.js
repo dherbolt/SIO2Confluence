@@ -1,3 +1,5 @@
+require('./common.js');
+
 const jetpack = require('fs-jetpack');
 const path = require('path');
 const processPage = require(__dirname + '/exporters/html/PageToHtml');
@@ -16,5 +18,5 @@ let page = processPage(sourceDir);
 
 const outputPath = path.normalize(sourceDir + '/index.html');
 jetpack.write(outputPath, page.html);
-console.log(`Output: ${outputPath}`);
-console.log(`Done.`);
+Logger.log(`Output: ${outputPath}`);
+Logger.log(`Done.`);

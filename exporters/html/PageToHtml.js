@@ -11,7 +11,7 @@ module.exports = function processPage (sourceFolder) {
 	const pageRootPath = path.normalize(sourceFolder);
 	const pageJson = pageRootPath + '/page.json';
 
-	console.log(`> Reading ${pageJson}...`);
+	Logger.log(`> Reading ${pageJson}...`);
 	let pageCfg = JSON.parse(jetpack.read(pageJson));
 
 	let body = [];
@@ -27,7 +27,7 @@ module.exports = function processPage (sourceFolder) {
 	function addChildren(node, html, isRoot) {
 		if (isRoot) {
 			pageLayout = node.layout && node.layout.columns;
-	//	console.log(pageLayout);
+	//	Logger.log(pageLayout);
 		}
 
 		if (node.children) {
@@ -84,7 +84,7 @@ module.exports = function processPage (sourceFolder) {
 		}
 
 		else if (node.type === 'Images') {
-			// console.log(node.children[0].file);
+			// Logger.log(node.children[0].file);
 			html.push(`<h2>${node.name}</h2>`);
 			node.children && addChildren(node, html);
 			pushDelmiter(html);
