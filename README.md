@@ -4,14 +4,14 @@ Legacy Samepage.io is only supported.
 
 
 ## Installation
-- run `git clone `https://github.com/dherbolt/SIO2Confluence.git`
+- run `git clone https://github.com/dherbolt/SIO2Confluence.git`
 - run `npm install`
 
 ## Usage
 - in `config.json`
   - set your Samepage.io and Confluence username and password
-  - set Confluence baseUrl  
-  - set target Confluence space 
+  - set Confluence baseUrl
+  - set target Confluence space
 - run `npm run start <sourcePageUrl> <targetPageName>`
 
 or
