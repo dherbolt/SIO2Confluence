@@ -78,7 +78,7 @@ function download(pageId, parentDir) {
 
 				return function () {
 					if (parentDir) {  // subpage
-						resolve();
+						resolve({rootDir});
 						return;
 					}
 
@@ -156,7 +156,7 @@ function addFile(coeId, id, outFilePath) {
 
 function downloadAllFiles(resolve) {
 	if (files.length === 0) {  // no files
-		resolve();
+		resolve({rootDir});
 		return;
 	}
 	downloadCallback(0, resolve);
@@ -164,11 +164,11 @@ function downloadAllFiles(resolve) {
 
 function downloadCallback(index, resolve) {
 	console.assert(resolve);
-	downloadFile(files[index]).then(function() {
+	downloadFile(files[index]).then(function () {
 		Logger.log(`Downloading file ${index + 1} of ${files.length}`);
 		if (index + 1 === files.length) {
 			Logger.log('files download done');
-			resolve({rootDir});
+			resolve({ rootDir });
 			return;
 		}
 		downloadCallback(index + 1, resolve);
