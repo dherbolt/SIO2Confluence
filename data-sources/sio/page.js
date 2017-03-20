@@ -2,7 +2,7 @@ const APP_ROOT = __dirname + '/../..';
 const request = require('request');
 const fs = require('fs');
 const sortChildren = require(__dirname + '/sortChildren');
-const sanitizeFileName = require(APP_ROOT + '/fileUtil').sanitizeFileName;
+const sanitize = require(APP_ROOT + '/fileUtil').sanitize;
 
 
 const sendXhr = require(APP_ROOT + '/sendXhr');
@@ -128,6 +128,10 @@ function processChild(node, coeId, dirPath) {
 		file: parseFile(node, coeId, dirPath)
 	};
 
+	if (nodeInfo.type === 'Page') {
+		nodeInfo.name = sanitize(nodeInfo.name);
+	}
+
 	if (nodeInfo.type === 'Table') {
 		nodeInfo.value = node.value;
 	}
@@ -139,10 +143,10 @@ function parseFile(node, coeId, dirPath) {
 	if (!node.file) {
 		return;
 	}
-	addFile(coeId, node.id, `${dirPath}/${sanitizeFileName(node.file.name)}`);
+	addFile(coeId, node.id, `${dirPath}/${sanitize(node.file.name)}`);
 	let file = node.file;
 	return {
-		name: sanitizeFileName(file.name),
+		name: sanitize(file.name),
 		dashifiedName: node.dashifiedName,
 		properties: file.properties
 	};

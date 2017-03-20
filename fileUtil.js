@@ -1,5 +1,5 @@
 module.exports = {
-	sanitizeFileName(fileName) {
+	sanitize(fileName) {
 		return fileName.replace(/[\?\|&;\$%@"<>\(\)\+,]/g, "");
 	}
 };
