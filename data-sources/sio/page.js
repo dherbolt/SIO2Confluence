@@ -4,7 +4,6 @@ const fs = require('fs');
 const sortChildren = require(__dirname + '/sortChildren');
 const sanitize = require(APP_ROOT + '/fileUtil').sanitize;
 
-
 const sendXhr = require(APP_ROOT + '/sendXhr');
 const auth = require(APP_ROOT + '/auth');
 const jetpack = require('fs-jetpack');
@@ -12,8 +11,6 @@ const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 var pages = {};
 
 let rootDir;
-
-
 
 function download(pageId, parentDir) {
 	return new Promise(function (resolve, reject) {
@@ -52,6 +49,8 @@ function download(pageId, parentDir) {
 				dirName = `${parentDir}/${dirName}`;
 			}
 
+			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
+
 			let page = {
 				id: sioPage.id,
 				name: sioPage.name,
@@ -62,8 +61,7 @@ function download(pageId, parentDir) {
 			};
 
 			page = sortChildren(page);
-			
-			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
+
 			jetpack.write(`${dirName}/page.json`, JSON.stringify(page, null, '\t'));
 
 			// skip subPages
@@ -119,7 +117,7 @@ function processChildren(node, coeId, dirPath) {
 function processChild(node, coeId, dirPath) {
 	let nodeInfo = {
 		type: node.type,
-		name: node.name,
+		name: node.name && sanitize(node.name),
 		id: node.id,
 		dashifiedName: node.dashifiedName,
 		layout: node.layout,
@@ -127,10 +125,6 @@ function processChild(node, coeId, dirPath) {
 		value: node.value && (node.value.text || node.value.url || node.value.html),
 		file: parseFile(node, coeId, dirPath)
 	};
-
-	if (nodeInfo.type === 'Page') {
-		nodeInfo.name = sanitize(nodeInfo.name);
-	}
 
 	if (nodeInfo.type === 'Table') {
 		nodeInfo.value = node.value;

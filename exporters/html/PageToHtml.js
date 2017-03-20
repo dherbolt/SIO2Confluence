@@ -18,7 +18,7 @@ module.exports = function processPage (sourceFolder) {
 
 	let body = [];
 	let page = {
-		name: getConflunecePageName(pageCfg),
+		name: getConfluencePageName(pageCfg),
 		html: '',
 		attachments: [],
 		subPages: [],
@@ -45,8 +45,8 @@ module.exports = function processPage (sourceFolder) {
 
 	let lastLayout;
 
-	function getConflunecePageName(page) {
-		return  (`${latinize(page.name)} [SIO: ${page.id}]`).replace(/\s+/g, ' ').trim();
+	function getConfluencePageName(page) {
+		return (`${latinize(page.name)} [SIO: ${page.id}]`).replace(/\s+/g, ' ').trim();
 	}
 
 	function addChild(node, html) {
@@ -123,7 +123,7 @@ module.exports = function processPage (sourceFolder) {
 		}
 		else if (node.type === 'Page') {
 			renderCmp(`<h3><a style="color:${linkColor};" href="${node.id}">${node.name}</a></h3>`);
-			page.subPages.push(Object.assign({}, node, {name: getConflunecePageName(node)}));
+			page.subPages.push(Object.assign({}, node, {name: getConfluencePageName(node)}));
 		}
 		else if (node.type === 'LinkList') {
 			html.push(`<h2>${node.name || 'Links'}</h2>`);
@@ -134,7 +134,7 @@ module.exports = function processPage (sourceFolder) {
 			renderCmp(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
 		}
 		else if (node.type === "FileFolder") {
-			Logger.error(`>> ${node.name} (id:${node.id}) contains a folder Skipping...`);
+			Logger.error(`>> ${getConfluencePageName(node)} contains a folder Skipping...`);
 		}
 		else if (node.type === 'Mashup') {
 			html.push(`<h2>${node.name || 'HTML'}</h2>`);
