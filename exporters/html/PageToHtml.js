@@ -162,6 +162,11 @@ module.exports = function processPage (sourceFolder) {
 		else if (node.type === 'DropboxLink') {
 			renderCmp(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
 		}
+		else if (node.type === 'Video' || node.type === 'Video2') {
+			html.push(`<h2>${node.name || 'Video'}</h2>`);
+			html.push(`<iframe width="560" height="315" src="${node.value || ''}" frameborder="0" allowfullscreen></iframe>`);
+			pushDelmiter(html);
+		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
 		}
