@@ -9,6 +9,7 @@ const auth = require(APP_ROOT + '/auth');
 const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const promisefy = require(APP_ROOT + '/promisefy');
+const downloadFileLib = require(__dirname + '/FileLib');
 var pages = {};
 
 let rootDir;
@@ -134,6 +135,10 @@ function processChildren(children, coeId, dirPath) {
 function processChild(node, customParams) {
 	return new Promise(function (resolve, reject) {
 		let {coeId, dirPath } = customParams || {};
+		if (node.type === 'FileLib') {
+			downloadFileLib(node).then(resolve);
+			return;
+		}
 		processChildren(node.children, coeId, dirPath).then(function (children) {
 			let nodeInfo = Object.assign({}, getNodeInfo(node), {
 				children: children,
