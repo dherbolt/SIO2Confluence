@@ -53,7 +53,7 @@ function download(pageId, parentDir) {
 
 			let page = {
 				id: sioPage.id,
-				name: sioPage.name,
+				name: sanitize(sioPage.name),
 				layout: sioPage.layout,
 				children: processChildren(sioPage, coeId, dirName),
 				value: (sioPage.value && sioPage.value.text) || '',
@@ -117,7 +117,7 @@ function processChildren(node, coeId, dirPath) {
 function processChild(node, coeId, dirPath) {
 	let nodeInfo = {
 		type: node.type,
-		name: node.name && sanitize(node.name),
+		name: sanitize(node.name),
 		id: node.id,
 		dashifiedName: node.dashifiedName,
 		layout: node.layout,

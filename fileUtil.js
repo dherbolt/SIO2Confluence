@@ -1,5 +1,9 @@
 module.exports = {
 	sanitize(str) {
-		return str.replace(/[\?\|&;:\$%@"'<>\(\)\+,]/g, "");
+		if (str) {
+			return str.replace(/[\?\|&;:\$%@"'<>\(\)\+#,]/g, "").replace(/[–\/]/gi, '-');
+		}
+		
+		return '';
 	}
 };
