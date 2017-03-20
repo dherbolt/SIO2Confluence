@@ -57,7 +57,7 @@ function download(pageId, parentDir) {
 					id: sioPage.id,
 					name: sanitize(sioPage.name),
 					layout: sioPage.layout,
-					children: children,
+					children: children[0].children,  // TODO: fix collecting on root level
 					value: (sioPage.value && sioPage.value.text) || '',
 					isNewSio: !!sioPage.teamContainer
 				};
