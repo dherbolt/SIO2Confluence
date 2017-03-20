@@ -1,5 +1,5 @@
 module.exports = function addTable(node, html) {
-	html.push(`<h2>${node.name}</h2>`);
+	html.push(`<h2>${node.name || 'Table'}</h2>`);
 	let table = node.value.tableDocument;
 	let cells = table.cells;
 	let rows = table.size.rows;

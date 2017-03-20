@@ -80,14 +80,19 @@ module.exports = function processPage (sourceFolder) {
 		if (node.type === 'TextNote') {
 			let value = (node.value || '').replace(/<p>/gi, '<p style="margin: 0;">');
 
-			html.push(`<h2>${node.name}</h2>`);
+			if ((/(href=|src=)("|')(https:\/\/)?samepage.io\/.*/gi).test(value)) {
+				jetpack.append(APP_ROOT + '/logs/links.txt', `[${new Date().toISOString()}] Page ${page.name} (id: ${page.id}) contains links to other pages.\n`);
+				Logger.log(`Page ${page.name} (id: ${page.id}) contains links to other pages.`);
+			}
+
+			html.push(`<h2>${node.name || 'Text'}</h2>`);
 			html.push(`<div>${value}</div>`);
 			pushDelmiter(html);
 		}
 
 		else if (node.type === 'Images') {
 			// Logger.log(node.children[0].file);
-			html.push(`<h2>${node.name}</h2>`);
+			html.push(`<h2>${node.name || 'Images'}</h2>`);
 			node.children && addChildren(node, html);
 			pushDelmiter(html);
 		}
@@ -108,7 +113,7 @@ module.exports = function processPage (sourceFolder) {
 		}
 
 		else if (node.type === 'FileLib') {
-			html.push(`<h2>Files</h2>`);
+			html.push(`<h2>${node.name || 'Files'}</h2>`);
 			node.children && addChildren(node, html);
 			pushDelmiter(html);
 		}
@@ -121,7 +126,7 @@ module.exports = function processPage (sourceFolder) {
 			page.subPages.push(Object.assign({}, node, {name: getConflunecePageName(node)}));
 		}
 		else if (node.type === 'LinkList') {
-			html.push(`<h2>Links</h2>`);
+			html.push(`<h2>${node.name || 'Links'}</h2>`);
 			addChildren(node, html);
 			pushDelmiter(html);
 		}
@@ -130,6 +135,11 @@ module.exports = function processPage (sourceFolder) {
 		}
 		else if (node.type === "FileFolder") {
 			Logger.error(`>> ${node.name} (id:${node.id}) contains a folder Skipping...`);
+		}
+		else if (node.type === 'Mashup') {
+			html.push(`<h2>${node.name || 'HTML'}</h2>`);
+			html.push(`<div>${node.value || ''}</div>`);
+			pushDelmiter(html);
 		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);

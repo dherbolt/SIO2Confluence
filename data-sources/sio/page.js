@@ -124,7 +124,7 @@ function processChild(node, coeId, dirPath) {
 		dashifiedName: node.dashifiedName,
 		layout: node.layout,
 		children: processChildren(node, coeId, dirPath),
-		value: node.value && (node.value.text || node.value.url || undefined),
+		value: node.value && (node.value.text || node.value.url || node.value.html),
 		file: parseFile(node, coeId, dirPath)
 	};
 
