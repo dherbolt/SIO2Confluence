@@ -46,7 +46,6 @@ module.exports = function sendXhr(method, params, callback) {
 			else {
 				resolve({response, body});
 			}
-			Logger.log(callback);
 			callback && callback({error, response, body});
 		});
 	});
