@@ -1,9 +1,13 @@
+const APP_ROOT = __dirname + '/../..';
+
+require(APP_ROOT + '/common.js');
+
 const jetpack = require('fs-jetpack');
 const path = require('path');
-const APP_ROOT = __dirname + '/../..';
 const layoutParser = require(APP_ROOT + '/data-sources/sio/layoutParser');
 const addTable = require(__dirname + '/Table');
 const latinize = require(APP_ROOT + '/lib/Latinize').latinize;
+const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const linkColor = '#00adef';
 let newSioComponentsHtml = [];
 let cmpIndex = 0;
@@ -46,7 +50,7 @@ module.exports = function processPage (sourceFolder) {
 	let lastLayout;
 
 	function getConfluencePageName(page) {
-		return (`${latinize(page.name)} [SIO: ${page.id}]`).replace(/\s+/g, ' ').trim();
+		return (`${latinize(page.name)} [SIO:${page.id}]`).replace(/\s+/g, ' ').trim();
 	}
 
 	function addChild(node, html) {
@@ -79,10 +83,19 @@ module.exports = function processPage (sourceFolder) {
 
 		if (node.type === 'TextNote') {
 			let value = (node.value || '').replace(/<p>/gi, '<p style="margin: 0;">');
+			let search = /(href=|src=)("|')((https:\/\/)?samepage.io\/.*?)("|')/gi;
+			let match = [];
 
-			if ((/(href=|src=)("|')(https:\/\/)?samepage.io\/.*/gi).test(value)) {
+			while (match=search.exec(value)) {
+    			let searchUrl = encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[SIO:${getSioPageIdFromUrl(match[3])}]"`);
+
+				// Logger.log(`Page ${page.name} (id: ${page.id}) contains links to other pages.`);
+				// Logger.log(`${match[3]} => ${searchUrl}`);
+
+				value = value.replace(match[3], searchUrl);
+				value = value.replace('<a href', `<a style="color:${linkColor};" href`);
+
 				jetpack.append(APP_ROOT + '/logs/links.txt', `[${new Date().toISOString()}] Page ${page.name} (id: ${page.id}) contains links to other pages.\n`);
-				Logger.log(`Page ${page.name} (id: ${page.id}) contains links to other pages.`);
 			}
 
 			html.push(`<h2>${node.name || 'Text'}</h2>`);
