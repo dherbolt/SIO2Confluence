@@ -154,6 +154,14 @@ module.exports = function processPage (sourceFolder) {
 			html.push(`<div>${node.value || ''}</div>`);
 			pushDelmiter(html);
 		}
+		else if (node.type === 'DropboxLinks') {
+			html.push(`<h2>${node.name || 'Cloud Files'}</h2>`);
+			addChildren(node, html);
+			pushDelmiter(html);
+		}
+		else if (node.type === 'DropboxLink') {
+			renderCmp(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
+		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
 		}
