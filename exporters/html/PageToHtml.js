@@ -167,6 +167,11 @@ module.exports = function processPage (sourceFolder) {
 			html.push(`<iframe width="560" height="315" src="${node.value || ''}" frameborder="0" allowfullscreen></iframe>`);
 			pushDelmiter(html);
 		}
+		else if (node.type === 'Map') {
+			html.push(`<h2>${node.name || 'Map'}</h2>`);
+			renderCmp(`<div><a style="color:${linkColor};" target="_blank" href="https://maps.google.com/maps?q=${node.value.lat},${node.value.lng}">Google Map</a></div>`);
+			pushDelmiter(html);
+		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
 		}

@@ -135,7 +135,7 @@ function processChild(node, customParams) {
 				dashifiedName: node.dashifiedName,
 				layout: node.layout,
 				children: children,
-				value: node.value && (node.value.text || node.value.url || node.value.html),
+				value: node.value && (node.value.text || node.value.url || node.value.html || node.value.markerPosition),
 				file: parseFile(node, coeId, dirPath)
 			};
 
