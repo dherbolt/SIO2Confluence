@@ -38,7 +38,7 @@ function download(pageId, parentDir) {
 
 			if (!parentDir) {
 				Logger.log(`Cleaning ${dirName}`);
-				jetpack.remove(dirName);
+				//jetpack.remove(dirName);
 				dirName = `download/${dirName}`;
 				rootDir = dirName;
 			}
@@ -180,6 +180,11 @@ function downloadCallback(index, resolve) {
 function downloadFile(file, callback) {
 	let { url, path } = file;
 	return new Promise(function (resolve, reject) {
+		if (jetpack.exists(path)) {
+			resolve();
+			return;
+		}
+
 		let option = {
 			uri: url,
 			method: 'GET',
