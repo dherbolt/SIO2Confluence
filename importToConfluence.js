@@ -151,9 +151,9 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 				Promise.all(fileUploads.concat(parsePromise)).then(() => {
 					jetpack.write(logFileName, JSON.stringify(sio2confMap, null, '\t'), {atomic: true});
 
-					renamePages(confIdToNameMap).then(() => {
+					// renamePages(confIdToNameMap).then(() => {
 						resolvePageUploaded && resolvePageUploaded();
-					});
+					// });
 				});
 			});
 		}
