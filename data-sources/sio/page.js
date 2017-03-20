@@ -53,14 +53,10 @@ function download(pageId, parentDir) {
 			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
 
 			promisefy(sioPage.children, processChild, { node: sioPage, coeId, dirPath: dirName }).then(function (children) {
-				let page = {
-					id: sioPage.id,
-					name: sanitize(sioPage.name),
-					layout: sioPage.layout,
+				let page = Object.assign({}, getNodeInfo(sioPage), {
 					children: children[0].children,  // TODO: fix collecting on root level
-					value: (sioPage.value && sioPage.value.text) || '',
 					isNewSio: !!sioPage.teamContainer
-				};
+				});
 
 				page = sortChildren(page);
 
@@ -124,20 +120,25 @@ function processChildren(children, coeId, dirPath) {
 	});
 }
 
+function getNodeInfo(node) {
+	return {
+		type: node.type,
+		name: sanitize(node.name),
+		id: node.id,
+		dashifiedName: node.dashifiedName,
+		layout: node.layout,
+		value: node.value && (node.value.text || node.value.url || node.value.html || node.value.markerPosition)
+	};
+}
+
 function processChild(node, customParams) {
 	return new Promise(function (resolve, reject) {
 		let { node, coeId, dirPath } = customParams || {};
 		processChildren(node.children, coeId, dirPath).then(function (children) {
-			let nodeInfo = {
-				type: node.type,
-				name: sanitize(node.name),
-				id: node.id,
-				dashifiedName: node.dashifiedName,
-				layout: node.layout,
+			let nodeInfo = Object.assign({}, getNodeInfo(node), {
 				children: children,
-				value: node.value && (node.value.text || node.value.url || node.value.html || node.value.markerPosition),
 				file: parseFile(node, coeId, dirPath)
-			};
+			});
 
 			if (nodeInfo.type === 'Table') {
 				nodeInfo.value = node.value;
