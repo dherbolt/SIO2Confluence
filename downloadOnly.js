@@ -33,11 +33,7 @@ function run(sourcePageUrl) {
 			sourcePageUrl = sourcePageUrl || cfg.sio.sourcePageUrl;
 
 			if (sourcePageUrl) {
-				let parts = sourcePageUrl.match(/\/page-(\d+)-?.*/i);
-
-				if (parts.length === 2) {
-					pageId = parts[1];
-				}
+				pageId = getSioPageIdFromUrl(sourcePageUrl);
 			}
 
 			if (!pageId) {
