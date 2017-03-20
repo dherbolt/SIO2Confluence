@@ -46,114 +46,132 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 		parentPage, // start in root page defined in cfg
 		function (result) {
 			const parentPageId = result.id;
-			let fileUploads = [];
+			let fileIndex = 0;
 
 			sio2confMap[page.id] = parentPageId;
 			confIdToNameMap[parentPageId] = page.name;
 
-			for (let fileName of page.attachments) {
-				page.html = page.html.replace(fileName, getFileLink(result.id, fileName));
-				Logger.log(`Uploading file '${fileName}'...`);
-				fileUploads.push(new Promise(function (resolve, reject) {
-					client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
-						resolve(attachment);
-						Logger.log(`File '${attachment.title}' uploaded successfully.`);
-					});
-				}));
-			}
-
-			let doneCallback;
-			let done = new Promise(function (resolve, reject) {
-				doneCallback = resolve;
+			let filesDoneCallback;
+			let filesDone = new Promise(function (resolve, reject) {
+				filesDoneCallback = resolve;
 			});
 
-			const processNextPage = function (index) {
-				let subPage = page.subPages[index];
+			const processNextFile = function (index) {
 
-				if (!subPage) {
-					doneCallback();
+				if (!page.attachments || index >= page.attachments.length) {
+					filesDoneCallback();
 					return;
 				}
 
-				Logger.log(subPage.name + '/' + index);
+				let fileName = page.attachments[index];
 
-				client.getPageIdByTitle(subPage.name)
-					.then((id) => {
-						// ok - get id
-						sio2confMap[subPage.id] = id;
-						pageMap[subPage.id] = id;
-						confIdToNameMap[id] = page.name;
-						processNextPage(index + 1);
-					})
-					.catch(() => {
-						// create
-						client.createPage(subPage.name, '', result.id, function (result) {
-							sio2confMap[subPage.id] = result.id;
-							pageMap[subPage.id] = result.id;
-							processNextPage(index + 1);
-						});
-					});
-			};
-
-			processNextPage(0);
-
-			done.then(() => {
-
-				for (let sioId in pageMap) {
-					let confluenceId = pageMap[sioId];
-
-					page.html = page.html.replace(sioId, getConfluenceSubPageUrl(confluenceId));
-				}
-
-				let options = {
-					bare: true,
-					breakBeforeBr: true,
-					fixUri: true,
-					hideComments: true,
-					indent: true,
-					'output-xhtml': true,
-					'show-body-only': true
-				};
-
-				// Parse and fix HTML
-				let parsePromise = new Promise(function (resolve, reject) {
-					tidy(page.html, options, function (err, parsedHtml) {
-						client.updatePage(
-							result.id,
-							parseInt(result.version.number, 10) + 1,
-							result.title,
-							parsedHtml,
-							function (result) {
-								Logger.log(`Page ${result.title} uploaded`);
-								const uploadSubPage = function (index) {
-									const pageInfo = page.subPages[index];
-
-									if (!pageInfo) {
-										resolve();
-										return;
-									}
-									Logger.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
-
-									const dir = `${sourceDir}/${pageInfo.dashifiedName}--${pageInfo.id}`;
-									run(dir, parentPageId, function () {
-										Logger.log(`Subpage uploaded: ${pageInfo.dashifiedName}`);
-										uploadSubPage(index + 1);
-									});
-									jetpack.write(__dirname + '/download/subpage.txt', JSON.stringify(pageInfo, null, '\t'));
-								};
-
-								uploadSubPage(0);
-							}
-						);
-					});
+				page.html = page.html.replace(new RegExp(`((href|src)=("|')?)${fileName}("|')?`, 'gi'), function () {
+					return arguments[0].replace(fileName, getFileLink(result.id, fileName));
 				});
 
-				Promise.all(fileUploads.concat(parsePromise)).then(() => {
-					jetpack.write(logFileName, JSON.stringify(sio2confMap, null, '\t'), {atomic: true});
+				Logger.log(`Uploading file '${fileName}'...`);
+				client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
+					Logger.log(`File '${attachment.title}' uploaded successfully.`);
+					processNextFile(fileIndex++);
+				});
+			};
 
-					// renamePages(confIdToNameMap).then(() => {
-						resolvePageUploaded && resolvePageUploaded();
-					// });
+			processNextFile(0);
+
+			filesDone.then(function () {
+				let doneCallback;
+				let done = new Promise(function (resolve, reject) {
+					doneCallback = resolve;
+				});
+
+				const processNextPage = function (index) {
+					let subPage = page.subPages[index];
+
+					if (!subPage) {
+						doneCallback();
+						return;
+					}
+
+					Logger.log(subPage.name + '/' + index);
+
+					client.getPageIdByTitle(subPage.name)
+						.then((id) => {
+							// ok - get id
+							sio2confMap[subPage.id] = id;
+							pageMap[subPage.id] = id;
+							confIdToNameMap[id] = page.name;
+							processNextPage(index + 1);
+						})
+						.catch(() => {
+							// create
+							client.createPage(subPage.name, '', result.id, function (result) {
+								sio2confMap[subPage.id] = result.id;
+								pageMap[subPage.id] = result.id;
+								processNextPage(index + 1);
+							});
+						});
+				};
+
+				processNextPage(0);
+
+				done.then(() => {
+
+					for (let sioId in pageMap) {
+						let confluenceId = pageMap[sioId];
+
+						page.html = page.html.replace(sioId, getConfluenceSubPageUrl(confluenceId));
+					}
+
+					let options = {
+						bare: true,
+						breakBeforeBr: true,
+						fixUri: true,
+						hideComments: true,
+						indent: true,
+						'output-xhtml': true,
+						'show-body-only': true
+					};
+
+					// Parse and fix HTML
+					let parsePromise = new Promise(function (resolve, reject) {
+						tidy(page.html, options, function (err, parsedHtml) {
+							client.updatePage(
+								result.id,
+								parseInt(result.version.number, 10) + 1,
+								result.title,
+								parsedHtml,
+								function (result) {
+									Logger.log(`Page ${result.title} uploaded`);
+									const uploadSubPage = function (index) {
+										const pageInfo = page.subPages[index];
+
+										if (!pageInfo) {
+											resolve();
+											return;
+										}
+										Logger.log(`Uploading subpage: ${pageInfo.dashifiedName}  ${index}/${page.subPages.length}`);
+
+										const dir = `${sourceDir}/${pageInfo.dashifiedName}--${pageInfo.id}`;
+										run(dir, parentPageId, function () {
+											Logger.log(`Subpage uploaded: ${pageInfo.dashifiedName}`);
+											uploadSubPage(index + 1);
+										});
+										jetpack.write(__dirname + '/download/subpage.txt', JSON.stringify(pageInfo, null, '\t'));
+									};
+
+									uploadSubPage(0);
+								}
+							);
+						});
+					});
+
+					parsePromise.then(() => {
+						jetpack.write(logFileName, JSON.stringify(sio2confMap, null, '\t'), {atomic: true});
+
+						// renamePages(confIdToNameMap).then(() => {
+							resolvePageUploaded && resolvePageUploaded();
+						// });
+					});
 				});
 			});
 		}
