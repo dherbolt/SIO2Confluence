@@ -6,4 +6,7 @@ global.getSioPageIdFromUrl = function(url) {
 	if (parts.length === 2) {
 		return parts[1] || null;
 	}
-}
+};
+
+// for readable callstacks during Promise rejections
+global.Promise = require('bluebird');

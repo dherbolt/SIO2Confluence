@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/dherbolt/SIO2Confluence#readme",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "confluence-api": "github:mosladil/confluence-api",
     "fs-jetpack": "^0.12.0",
     "htmltidy": "0.0.6",

@@ -8,6 +8,7 @@ const sendXhr = require(APP_ROOT + '/sendXhr');
 const auth = require(APP_ROOT + '/auth');
 const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
+const promisefy = require(APP_ROOT + '/promisefy');
 var pages = {};
 
 let rootDir;
@@ -51,41 +52,43 @@ function download(pageId, parentDir) {
 
 			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
 
-			let page = {
-				id: sioPage.id,
-				name: sanitize(sioPage.name),
-				layout: sioPage.layout,
-				children: processChildren(sioPage, coeId, dirName),
-				value: (sioPage.value && sioPage.value.text) || '',
-				isNewSio: !!sioPage.teamContainer
-			};
-
-			page = sortChildren(page);
-
-			jetpack.write(`${dirName}/page.json`, JSON.stringify(page, null, '\t'));
-
-			// skip subPages
-			if (!cfg.sio.downloadSubpages) {
-				downloadAllFiles(resolve);
-				return;
-			}
-
-			let subPages = [];
-			for (let page of sioPage.components.subpages) {
-				subPages.push(download(page.id, dirName));
-			}
-			Promise.all(subPages).then((function (parentDir) {
-
-				return function () {
-					if (parentDir) {  // subpage
-						resolve({rootDir});
-						return;
-					}
-
-					downloadAllFiles(resolve);  // parent page completed
-					// Promise.all(allFiles).then(() => resolve());
+			promisefy(sioPage.children, processChild, { node: sioPage, coeId, dirPath: dirName }).then(function (children) {
+				let page = {
+					id: sioPage.id,
+					name: sanitize(sioPage.name),
+					layout: sioPage.layout,
+					children: children,
+					value: (sioPage.value && sioPage.value.text) || '',
+					isNewSio: !!sioPage.teamContainer
 				};
-			})(parentDir));
+
+				page = sortChildren(page);
+
+				jetpack.write(`${dirName}/page.json`, JSON.stringify(page, null, '\t'));
+
+				// skip subPages
+				if (!cfg.sio.downloadSubpages) {
+					downloadAllFiles(resolve);
+					return;
+				}
+
+				let subPages = [];
+				for (let page of sioPage.components.subpages) {
+					subPages.push(download(page.id, dirName));
+				}
+				Promise.all(subPages).then((function (parentDir) {
+
+					return function () {
+						if (parentDir) {  // subpage
+							resolve({ rootDir });
+							return;
+						}
+
+						downloadAllFiles(resolve);  // parent page completed
+						// Promise.all(allFiles).then(() => resolve());
+					};
+				})(parentDir));
+			});
 		});
 	});
 }
@@ -99,38 +102,50 @@ function getContent(pageId, callback) {
 	});
 }
 
-function processChildren(node, coeId, dirPath) {
-	let children = [];
+function processChildren(children, coeId, dirPath) {
+	return new Promise(function (resolve, reject) {
+		// let children = [];
 
-	if (!node.children) {
-		return undefined;
-	}
+		if (!children) {
+			resolve();
+			return undefined;
+		}
 
-	for (let child of node.children) {
-		children.push(processChild(child, coeId, dirPath));
-	}
+		let processedChildren = [];
+		for (let child of children) {
+			processedChildren.push(processChild(child, {node: child, coeId, dirPath}));
+		}
 
-	children = children.length ? children : undefined;
-	return children;
+		Promise.all(processedChildren).then(function (children) {
+			// console.log('####', children);
+			children = children.length ? children : undefined;
+			resolve(children);
+		});
+	});
 }
 
-function processChild(node, coeId, dirPath) {
-	let nodeInfo = {
-		type: node.type,
-		name: sanitize(node.name),
-		id: node.id,
-		dashifiedName: node.dashifiedName,
-		layout: node.layout,
-		children: processChildren(node, coeId, dirPath),
-		value: node.value && (node.value.text || node.value.url || node.value.html),
-		file: parseFile(node, coeId, dirPath)
-	};
+function processChild(node, customParams) {
+	return new Promise(function (resolve, reject) {
+		let { node, coeId, dirPath } = customParams || {};
+		processChildren(node.children, coeId, dirPath).then(function (children) {
+			let nodeInfo = {
+				type: node.type,
+				name: sanitize(node.name),
+				id: node.id,
+				dashifiedName: node.dashifiedName,
+				layout: node.layout,
+				children: children,
+				value: node.value && (node.value.text || node.value.url || node.value.html),
+				file: parseFile(node, coeId, dirPath)
+			};
 
-	if (nodeInfo.type === 'Table') {
-		nodeInfo.value = node.value;
-	}
+			if (nodeInfo.type === 'Table') {
+				nodeInfo.value = node.value;
+			}
 
-	return nodeInfo;
+			resolve(nodeInfo);
+		});
+	});
 }
 
 function parseFile(node, coeId, dirPath) {
@@ -158,7 +173,7 @@ function addFile(coeId, id, outFilePath) {
 
 function downloadAllFiles(resolve) {
 	if (files.length === 0) {  // no files
-		resolve({rootDir});
+		resolve({ rootDir });
 		return;
 	}
 	downloadCallback(0, resolve);
