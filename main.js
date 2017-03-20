@@ -7,17 +7,24 @@ const exportFromSio = require('./exportFromSio').exportFromSio;
 const importToConfluence = require('./importToConfluence').importToConfluence;
 const argv = process.argv.slice(2);
 
-function run (sourcePageUrl, targetPageName) {
+function run(sourcePageUrl, targetPageName) {
 	Logger.log('Exporting from SIO...');
-	exportFromSio(sourcePageUrl).then((args) => {
-		let {rootDir} = args;
-		Logger.log('DONE -- All downloaded in ' + rootDir);
+	exportFromSio(sourcePageUrl)
+		.then((args) => {
+			let { rootDir } = args;
+			Logger.log('DONE -- All downloaded in ' + rootDir);
 
-		Logger.log('Posting to Confluence...');
-		importToConfluence(__dirname + '/' + rootDir, targetPageName, () => {
-			Logger.log('DONE -- All uploaded');
+			Logger.log('Posting to Confluence...');
+			importToConfluence(__dirname + '/' + rootDir, targetPageName, () => {
+				Logger.log('DONE -- All uploaded');
+			});
+		})
+		.then(() => {
+			console.log(`Output logged to ${Logger.getLogFilename()}`);
+		})
+		.catch((err) => {
+			console.log(err);
 		});
-	});
 }
 
 run(argv[0] || null, argv[1] || null);

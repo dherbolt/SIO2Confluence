@@ -128,6 +128,9 @@ module.exports = function processPage (sourceFolder) {
 		else if (node.type === "Link") {
 			renderCmp(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
 		}
+		else if (node.type === "FileFolder") {
+			Logger.error(`>> ${node.name} (id:${node.id}) contains a folder Skipping...`);
+		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
 		}
