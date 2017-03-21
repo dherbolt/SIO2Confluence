@@ -8,7 +8,7 @@ const processPage = require('./exporters/html/PageToHtml');
 const path = require('path');
 let argv = process.argv.slice(2);
 let sio2confMap;
-let logFileName = './logs/sio2conf.json';
+let logFileName = './data/sio2conf.json';
 let confIdToNameMap = {};
 
 let client = new Confluence({
@@ -70,9 +70,7 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 					return arguments[0].replace(fileName, getFileLink(result.id, fileName));
 				});
 
-				Logger.log(`Uploading file '${fileName}'...`);
 				client.uploadOrUpdateFile(page.name, fileName, `${sourceDir}/${fileName}`, function (attachment) {
-					Logger.log(`File '${attachment.title}' uploaded successfully.`);
 					processNextFile(fileIndex++);
 				});
 			};
