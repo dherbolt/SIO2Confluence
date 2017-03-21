@@ -84,7 +84,7 @@ module.exports = function processPage (sourceFolder) {
 
 		if (node.type === 'TextNote') {
 			let value = (node.value || '').replace(/<p>/gi, '<p style="margin: 0;">');
-			let search = /(href=|src=)("|')((https:\/\/)?samepage.io\/.*?)("|')/gi;
+			let search = /(href=|src=)("|')((https:\/\/)?samepage.io\.*?)("|')/gi;
 			let match = [];
 
 			while (match=search.exec(value)) {
