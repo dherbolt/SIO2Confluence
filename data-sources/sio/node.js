@@ -12,6 +12,9 @@ module.exports = {
 		};
 
 		switch (node.type) {
+			case 'File':
+				nodeInfo.value = node.file;
+				break;
 			case 'Map':
 				nodeInfo.value = node.value.markerPosition;
 				break;

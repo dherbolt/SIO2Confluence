@@ -110,13 +110,13 @@ module.exports = function processPage (sourceFolder) {
 			node.children && addChildren(node, html);
 			pushDelmiter(html);
 		}
-		else if (node.type === 'File' && node.file.properties.imageFormat) {
-			let imgInfo = node.file.properties;
+		else if (node.type === 'File' && node.value.properties.imageFormat) {
+			let imgInfo = node.value.properties;
 			// html.push(JSON.stringify(node));
 			let style =	"max-width: 100%; height: auto !important;";
-			renderCmp(`<div style="${pageCfg.isNewSio ? 'text-align: center' : ''}"> <img style="${style}" src="${node.file.name}" width="${imgInfo.imageSize.width}" height="${imgInfo.imageSize.height}" /> </div>`);
+			renderCmp(`<div style="${pageCfg.isNewSio ? 'text-align: center' : ''}"> <img style="${style}" src="${node.value.name}" width="${imgInfo.imageSize.width}" height="${imgInfo.imageSize.height}" /> </div>`);
 
-			page.attachments.push(node.file.name);
+			page.attachments.push(node.value.name);
 		}
 
 		else if (node.type === 'Table') {
@@ -132,8 +132,8 @@ module.exports = function processPage (sourceFolder) {
 			pushDelmiter(html);
 		}
 		else if (node.type === 'File') {
-			renderCmp(`<div><a style="color:${linkColor};" href="${node.file.name}">${node.name}</a></div>`);
-			page.attachments.push(node.file.name);
+			renderCmp(`<div><a style="color:${linkColor};" href="${node.value.name}">${node.name}</a></div>`);
+			page.attachments.push(node.value.name);
 		}
 		else if (node.type === 'Page') {
 			renderCmp(`<h3><a style="color:${linkColor};" href="${node.id}">${node.name}</a></h3>`);
