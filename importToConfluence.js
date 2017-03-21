@@ -168,9 +168,13 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 					parsePromise.then(() => {
 						jetpack.write(logFileName, JSON.stringify(sio2confMap, null, '\t'), {atomic: true});
 
-						// renamePages(confIdToNameMap).then(() => {
+						if (cfg.confluence.renamePages) {
+							renamePages(confIdToNameMap).then(() => {
+								resolvePageUploaded && resolvePageUploaded();
+							});
+						} else {
 							resolvePageUploaded && resolvePageUploaded();
-						// });
+						}
 					});
 				});
 			});

@@ -1,17 +1,19 @@
 {
 	"sio": {
+		"baseUrl": "https://samepage.io",
 		"userName": "",
 		"password": "",
-		"baseUrl": "https://samepage.io",
-		"sourcePageUrl": "https://samepage.io/app/#!/72f3728084841d1a9db65c44335a41d27bfa96c2/page-58309038387064065-10k-users-in-kerio-connect",
+		"sourcePageUrl": "",
 		"columnOrder": ["left", "center", "right"],
-		"downloadSubpages": true
+		"downloadSubpages": true,
+		"downloadAttachments": false
 	},
 	"confluence": {
+		"baseUrl": "https://confluence.devfactory.com",
 		"userName": "",
 		"password": "",
-		"baseUrl": "https://confluence.devfactory.com",
-		"targetSpace": "KERCON",
-		"targetPage": "mosladil"
+		"targetSpace": "",
+		"targetPage": "",
+		"renamePages": false
 	}
 }
