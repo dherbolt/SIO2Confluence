@@ -6,7 +6,7 @@ function sortChildren(page) {
 	if (page.isNewSio) {
 		return page;
 	}
-	
+
 	page.children = sortChildrenInternal(page);
 	return page;
 }
