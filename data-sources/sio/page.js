@@ -10,6 +10,7 @@ const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const promisefy = require(APP_ROOT + '/promisefy');
 const downloadFileLib = require(__dirname + '/FileLib');
+const { getNodeInfo } = require(__dirname + '/node');
 var pages = {};
 
 let rootDir;
@@ -97,17 +98,6 @@ function getContent(pageId, callback) {
 			tenantId: auth.info.tenant.publicId
 		}, resolve);
 	});
-}
-
-function getNodeInfo(node) {
-	return {
-		type: node.type,
-		name: sanitize(node.name),
-		id: node.id,
-		dashifiedName: node.dashifiedName,
-		layout: node.layout,
-		value: node.value && (node.value.text || node.value.url || node.value.html || node.value.markerPosition)
-	};
 }
 
 function processChildren(children, coeId, dirPath) {

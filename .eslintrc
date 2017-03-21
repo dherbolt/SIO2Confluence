@@ -6,7 +6,8 @@
 		"semi": 2
 	},
 	"globals": {
-		"Logger": true
+		"Logger": true,
+		"APP_ROOT": true
 	},
 	"env": {
 		"es6": true,
