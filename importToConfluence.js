@@ -16,7 +16,8 @@ let client = new Confluence({
 	password: cfg.confluence.password,
 	baseUrl: cfg.confluence.baseUrl,
 	space: cfg.confluence.targetSpace,
-	rootPage: cfg.confluence.targetPage
+	rootPage: cfg.confluence.targetPage,
+	uploadMissingFilesOnly: cfg.confluence.uploadMissingFilesOnly
 });
 
 sio2confMap = jetpack.read(logFileName, 'json') || {};
