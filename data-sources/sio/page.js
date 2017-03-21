@@ -15,6 +15,8 @@ var pages = {};
 
 let rootDir;
 
+let files = [];
+
 function download(pageId, parentDir) {
 	return new Promise(function (resolve, reject) {
 		// downloadFile({
@@ -54,7 +56,8 @@ function download(pageId, parentDir) {
 
 			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
 
-			promisefy(sioPage.children, processChild, {coeId, dirPath: dirName }).then(function (children) {
+
+			promisefy(sioPage.children, processChild, { coeId, dirPath: dirName, sioPage }).then(function (children) {
 				let page = Object.assign({}, getNodeInfo(sioPage), {
 					children: children,
 					isNewSio: !!sioPage.teamContainer
@@ -100,9 +103,10 @@ function getContent(pageId, callback) {
 	});
 }
 
-function processChildren(children, coeId, dirPath) {
+function processChildren(children, args) {
 	return new Promise(function (resolve, reject) {
 		// let children = [];
+		let { coeId, dirPath, sioPage } = args;
 
 		if (!children) {
 			resolve();
@@ -111,7 +115,7 @@ function processChildren(children, coeId, dirPath) {
 
 		let processedChildren = [];
 		for (let child of children) {
-			processedChildren.push(processChild(child, {coeId, dirPath}));
+			processedChildren.push(processChild(child, { coeId, dirPath, files, sioPage }));
 		}
 
 		Promise.all(processedChildren).then(function (children) {
@@ -124,15 +128,19 @@ function processChildren(children, coeId, dirPath) {
 
 function processChild(node, customParams) {
 	return new Promise(function (resolve, reject) {
-		let {coeId, dirPath } = customParams || {};
+		let { coeId, dirPath, sioPage } = customParams || {};
 		if (node.type === 'FileLib') {
-			downloadFileLib(node).then(resolve);
-			return;
+			downloadFileLib(node, customParams).then(function (args) {
+				let nodeInfo = args.nodeInfo;
+				let nodeFiles = args.files;
+
+				Array.prototype.push.apply(files, nodeFiles);  // concat & add items to 'files'
+				resolve(nodeInfo);
+			});
 		}
-		processChildren(node.children, coeId, dirPath).then(function (children) {
+		processChildren(node.children, customParams).then(function (children) {
 			let nodeInfo = Object.assign({}, getNodeInfo(node), {
 				children: children,
-				file: parseFile(node, coeId, dirPath)
 			});
 
 			if (nodeInfo.type === 'Table') {
@@ -141,28 +149,6 @@ function processChild(node, customParams) {
 
 			resolve(nodeInfo);
 		});
-	});
-}
-
-function parseFile(node, coeId, dirPath) {
-	if (!node.file) {
-		return;
-	}
-	addFile(coeId, node.id, `${dirPath}/${sanitize(node.file.name)}`);
-	let file = node.file;
-	return {
-		name: sanitize(file.name),
-		dashifiedName: node.dashifiedName,
-		properties: file.properties
-	};
-}
-
-var files = [];
-
-function addFile(coeId, id, outFilePath) {
-	files.push({
-		url: `${cfg.sio.baseUrl}/${coeId}/file/${id}`,
-		path: outFilePath
 	});
 }
 

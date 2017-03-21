@@ -12,7 +12,8 @@
  */
 const promisefy = function (argList, itemCallback, customParams) {
 	return new Promise(function (resolve, reject) {
-		var returnValues = [];
+		let returnValues = [];
+
 		if (argList.length === 0) {
 			resolve(returnValues);
 			return;
