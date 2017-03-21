@@ -3,9 +3,11 @@ global.Logger = new Logger('./logs/log-' + (new Date().toISOString().replace(/T/
 
 global.getSioPageIdFromUrl = function(url) {
 	let parts = url.match(/\/#?page-(\d+)-?.*/i);
-	if (parts.length === 2) {
+	if (parts && parts.length === 2) {
 		return parts[1] || null;
 	}
+
+	return null;
 };
 
 // Test

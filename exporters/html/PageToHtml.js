@@ -11,6 +11,7 @@ const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const linkColor = '#00adef';
 let newSioComponentsHtml = [];
 let cmpIndex = 0;
+const sioIdPrefix = cfg.confluence.sioIdPrefix || 'SIO';
 
 module.exports = function processPage (sourceFolder) {
 	const useLayouts = true;
@@ -50,7 +51,7 @@ module.exports = function processPage (sourceFolder) {
 	let lastLayout;
 
 	function getConfluencePageName(page) {
-		return (`${latinize(page.name)} [SIO:${page.id}]`).replace(/\s+/g, ' ').trim();
+		return (`${latinize(page.name)} [${sioIdPrefix}:${page.id}]`).replace(/\s+/g, ' ').trim();
 	}
 
 	function addChild(node, html) {
@@ -87,7 +88,7 @@ module.exports = function processPage (sourceFolder) {
 			let match = [];
 
 			while (match=search.exec(value)) {
-    			let searchUrl = encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[SIO:${getSioPageIdFromUrl(match[3])}]"`);
+    			let searchUrl = encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[${sioIdPrefix}:${getSioPageIdFromUrl(match[3])}]"`);
 
 				// Logger.log(`Page ${page.name} (id: ${page.id}) contains links to other pages.`);
 				// Logger.log(`${match[3]} => ${searchUrl}`);
