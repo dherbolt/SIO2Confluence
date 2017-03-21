@@ -7,7 +7,7 @@
  *
  * @param {Array} argList List of arguments for each itemCallback call
  * @param {Function} itemCallback - can optionally return Promise
- * @param {Function} allDoneCallback (optional)
+ * @param {Object} customParams (optional) Custom params passed to itemCallback function
  * @returns {Promise} Resolved when all itemCallbacks are finished
  */
 const promisefy = function (argList, itemCallback, customParams) {

@@ -38,7 +38,7 @@ function download(pageId, parentDir) {
 			let coeId = sioPage.coeRoomId.split('/')[0];
 
 			if (!parentDir) {
-				Logger.log(`Cleaning ${dirName}`);
+				//Logger.log(`Cleaning ${dirName}`);
 				//jetpack.remove(dirName);
 				dirName = `download/${dirName}`;
 				rootDir = dirName;
@@ -52,9 +52,9 @@ function download(pageId, parentDir) {
 
 			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
 
-			promisefy(sioPage.children, processChild, { node: sioPage, coeId, dirPath: dirName }).then(function (children) {
+			promisefy(sioPage.children, processChild, {coeId, dirPath: dirName }).then(function (children) {
 				let page = Object.assign({}, getNodeInfo(sioPage), {
-					children: children[0].children,  // TODO: fix collecting on root level
+					children: children,
 					isNewSio: !!sioPage.teamContainer
 				});
 
@@ -98,28 +98,6 @@ function getContent(pageId, callback) {
 	});
 }
 
-function processChildren(children, coeId, dirPath) {
-	return new Promise(function (resolve, reject) {
-		// let children = [];
-
-		if (!children) {
-			resolve();
-			return undefined;
-		}
-
-		let processedChildren = [];
-		for (let child of children) {
-			processedChildren.push(processChild(child, {node: child, coeId, dirPath}));
-		}
-
-		Promise.all(processedChildren).then(function (children) {
-			// console.log('####', children);
-			children = children.length ? children : undefined;
-			resolve(children);
-		});
-	});
-}
-
 function getNodeInfo(node) {
 	return {
 		type: node.type,
@@ -131,9 +109,31 @@ function getNodeInfo(node) {
 	};
 }
 
+function processChildren(children, coeId, dirPath) {
+	return new Promise(function (resolve, reject) {
+		// let children = [];
+
+		if (!children) {
+			resolve();
+			return undefined;
+		}
+
+		let processedChildren = [];
+		for (let child of children) {
+			processedChildren.push(processChild(child, {coeId, dirPath}));
+		}
+
+		Promise.all(processedChildren).then(function (children) {
+			// console.log('####', children);
+			children = children.length ? children : undefined;
+			resolve(children);
+		});
+	});
+}
+
 function processChild(node, customParams) {
 	return new Promise(function (resolve, reject) {
-		let { node, coeId, dirPath } = customParams || {};
+		let {coeId, dirPath } = customParams || {};
 		processChildren(node.children, coeId, dirPath).then(function (children) {
 			let nodeInfo = Object.assign({}, getNodeInfo(node), {
 				children: children,
