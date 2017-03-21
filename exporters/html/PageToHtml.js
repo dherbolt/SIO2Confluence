@@ -173,6 +173,30 @@ module.exports = function processPage (sourceFolder) {
 			renderCmp(`<div><a style="color:${linkColor};" target="_blank" href="https://maps.google.com/maps?q=${node.value.lat},${node.value.lng}">Google Map</a></div>`);
 			pushDelmiter(html);
 		}
+		else if (node.type === 'EventList') {
+			html.push(`<h2>${node.name || 'Events'}</h2>`);
+			addChildren(node, html);
+			pushDelmiter(html);
+		}
+		else if (node.type === 'Event') {
+			let content = `<div><b>${node.name}</b></div>`;
+
+			content += '<div>';
+			if (node.value.location) {
+				content += `<li>location: ${node.value.location}</li>`;
+			}
+			if (node.value.description) {
+				content += `description: ${node.value.description}</li>`;
+			}
+			if (node.value.startDate) {
+				content += `<li>starts: ${node.value.startDate}</li>`;
+			}
+			if (node.value.endDate) {
+				content += `<li>ends: ${node.value.endDate}</li>`;
+			}
+			content += '</div>';
+			renderCmp(content);
+		}
 		else {
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
 		}
