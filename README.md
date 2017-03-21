@@ -11,9 +11,19 @@ You need a [Git](https://git-scm.com/downloads) client and [Node.JS](https://nod
 ## Usage
 - in `config.json`
   - set your Samepage.io and Confluence username and password
-  - set Confluence baseUrl
-  - set target Confluence space
-- run `npm run start <sourcePageUrl> <targetPageName>`
+  - set Samepage
+  	- `sourcePageUrl`, e.g. https://samepage.io/abc123/page-123456
+  - set Confluence
+	- `targetSpace`, e.g. KERCON
+	- `targetPage`, e.g. My Page
 
 or
-- set `sourcePageUrl` and `targetPage` in config.json
+
+- set `targetSpace`
+- run `npm run start <sourcePageUrl> <targetPage>`
+
+## Other Tasks
+- `npm run export-from-sio <sourcePageUrl>`
+- `npm run import-to-confluence <folder> <targetPage>`
+- `npm run to-html <folder>`
+- `npm run download-only <sourcePageUrl>`
