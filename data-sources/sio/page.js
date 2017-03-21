@@ -173,7 +173,12 @@ function addFile(coeId, id, outFilePath) {
 
 
 function downloadAllFiles(resolve) {
-	if (files.length === 0) {  // no files
+	if (false === cfg.sio.downloadAttachments) { // download disabled
+		Logger.log('Disabled files download, skipping...');
+		resolve({ rootDir });
+		return;
+	} else if (files.length === 0) {  // no files
+		Logger.log('No files found, skipping');
 		resolve({ rootDir });
 		return;
 	}

@@ -6,7 +6,7 @@
 		"sourcePageUrl": "",
 		"columnOrder": ["left", "center", "right"],
 		"downloadSubpages": true,
-		"downloadAttachments": false
+		"downloadAttachments": true
 	},
 	"confluence": {
 		"baseUrl": "https://confluence.devfactory.com",

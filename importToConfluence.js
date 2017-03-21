@@ -76,7 +76,11 @@ function run(sourceDir, parentPage, resolvePageUploaded) {
 				});
 			};
 
-			processNextFile(0);
+			if (cfg.sio.downloadAttachments) {
+				processNextFile(0);
+			} else {
+				filesDoneCallback();
+			}
 
 			filesDone.then(function () {
 				let doneCallback;
