@@ -11,7 +11,7 @@ module.exports = function downloadFileLib(node, customParams) {
 
 		console.assert(node.type === 'FileLib');
 
-		let nodeInfo = Object.assign({}, getNodeInfo(node), {
+		let nodeInfo = Object.assign({}, getNodeInfo(node, coeId, dirPath), {
 			todo: 'TODO'
 		});
 
@@ -67,7 +67,7 @@ function processFile(fileNode, args) {
 		if (fileNode === 'FileFolder') {
 			processFolder(fileNode, args).then(function () {
 				resolve({
-					nodeInfo: getNodeInfo(fileNode),
+					nodeInfo: getNodeInfo(fileNode, coeId, dirPath),
 					nodeFiles: files
 				});
 			});

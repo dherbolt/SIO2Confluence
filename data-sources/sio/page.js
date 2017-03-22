@@ -16,6 +16,7 @@ var pages = {};
 let rootDir;
 
 let files = [];
+global.files = files;
 
 function download(pageId, parentDir) {
 	return new Promise(function (resolve, reject) {
@@ -58,7 +59,7 @@ function download(pageId, parentDir) {
 
 
 			promisefy(sioPage.children, processChild, { coeId, dirPath: dirName, sioPage }).then(function (children) {
-				let page = Object.assign({}, getNodeInfo(sioPage), {
+				let page = Object.assign({}, getNodeInfo(sioPage, coeId, dirName), {
 					children: children,
 					isNewSio: !!sioPage.teamContainer
 				});
@@ -137,9 +138,11 @@ function processChild(node, customParams) {
 				Array.prototype.push.apply(files, nodeFiles);  // concat & add items to 'files'
 				resolve(nodeInfo);
 			});
+			return;
 		}
+
 		processChildren(node.children, customParams).then(function (children) {
-			let nodeInfo = Object.assign({}, getNodeInfo(node), {
+			let nodeInfo = Object.assign({}, getNodeInfo(node, coeId, dirPath), {
 				children: children,
 			});
 
