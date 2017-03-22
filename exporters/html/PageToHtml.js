@@ -209,6 +209,7 @@ module.exports = function processPage (sourceFolder) {
 			renderCmp(content);
 		}
 		else {
+			Logger.log(`Unknown node type '${node.type}' -- '${JSON.stringify(node)}'`);
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
 		}
 	}
