@@ -84,17 +84,14 @@ module.exports = function processPage (sourceFolder) {
 
 		if (node.type === 'TextNote') {
 			let value = (node.value || '').replace(/<p>/gi, '<p style="margin: 0;">');
-			let search = /(href=|src=)("|')((https:\/\/)?samepage.io\.*?)("|')/gi;
-			let match = [];
+			let search = /\W(?:href=|src=)("|')((?:https:\/\/)?samepage\.io\/.*?)\1|("|')(\/.*?)\3/gi;
+			let match;
 
-			while (match=search.exec(value)) {
-    			let searchUrl = encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[${sioIdPrefix}:${getSioPageIdFromUrl(match[3])}]"`);
+			while (match = search.exec(value)) {
+    			let matchedUri = match[2] || match[4];
+				let searchUrl = encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[${sioIdPrefix}:${getSioPageIdFromUrl(matchedUri)}]"`);
 
-				// Logger.log(`Page ${page.name} (id: ${page.id}) contains links to other pages.`);
-				// Logger.log(`${match[3]} => ${searchUrl}`);
-
-				value = value.replace(match[3], searchUrl);
-				value = value.replace('<a href', `<a style="color:${linkColor};" href`);
+				value = value.replace(matchedUri, searchUrl);
 
 				jetpack.append(APP_ROOT + '/logs/links.txt', `[${new Date().toISOString()}] Page ${page.name} (id: ${page.id}) contains links to other pages.\n`);
 			}
