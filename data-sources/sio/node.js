@@ -19,7 +19,7 @@ function getNodeInfo(node, coeId, dirPath) {
 
 	switch (node.type) {
 		case 'File':
-			nodeInfo.value = node.file;
+			nodeInfo.value = nodeInfo.file;
 			break;
 		case 'Map':
 			nodeInfo.value = node.value.markerPosition;
