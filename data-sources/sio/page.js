@@ -100,7 +100,7 @@ function getContent(pageId, callback) {
 		sendXhr('Pages.getWithContent', {
 			id: pageId,
 			tenantId: auth.info.tenant.publicId
-		}, resolve);
+		}, { callback: resolve });
 	});
 }
 
@@ -131,11 +131,7 @@ function processChild(node, customParams) {
 	return new Promise(function (resolve, reject) {
 		let { coeId, dirPath, sioPage } = customParams || {};
 		if (node.type === 'FileLib') {
-			downloadFileLib(node, customParams).then(function (args) {
-				let nodeInfo = args.nodeInfo;
-				let nodeFiles = args.files;
-
-				Array.prototype.push.apply(files, nodeFiles);  // concat & add items to 'files'
+			downloadFileLib(node, customParams).then(function (nodeInfo) {
 				resolve(nodeInfo);
 			});
 			return;

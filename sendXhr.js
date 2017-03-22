@@ -5,13 +5,14 @@ const cfg = JSON.parse(jetpack.read('config.json'));
 
 let reqId = 2;
 
-module.exports = function sendXhr(method, params, callback) {
+module.exports = function sendXhr(method, params, options = {}) {
 	return new Promise(function (resolve, reject) {
 		var
 			headers = {
 				'Content-Type': 'application/json'
 			},
-			uri;
+			uri,
+			callback = options.callback;
 
 		if (method !== 'Session.create') {
 			uri = `${cfg.sio.baseUrl}/api/app/`;
@@ -24,7 +25,7 @@ module.exports = function sendXhr(method, params, callback) {
 		uri = uri + 'jsonrpc?method=' + method;
 
 		request({
-			uri: uri,
+			uri: options.uri || uri,
 			method: 'POST',
 			timeout: 10000,
 			followRedirect: true,
@@ -32,7 +33,7 @@ module.exports = function sendXhr(method, params, callback) {
 			maxRedirects: 10,
 			jar: true,
 			gzip: true,
-			headers: headers,
+			headers: Object.assign({}, headers, options.headers),
 			json: {
 				id: reqId++,
 				jsonrpc: "2.0",

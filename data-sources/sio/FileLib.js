@@ -17,71 +17,44 @@ module.exports = function downloadFileLib(node, customParams) {
 
 		// empty file lib
 		if (!node.children || node.children.length === 0) {
-			resolve({
-				nodeInfo,
-				files: []
-			});
+			resolve(nodeInfo);
 		}
 
-		let files = [];
+		promisefy(node.children, processFile, { dirPath, coeId, sioPage }).then(function (packedChildren) {
+			// unpack array of children
+			let children = [];
+			for (let child of packedChildren) {
+				if (Array.isArray(child)) {
+					// unpack
+					Array.prototype.push.apply(children, child);  // concat & add items to 'children'
+				}
+				else {
+					children.push(child);
+				}
+			}
 
-		promisefy(node.children, processFile, { files, dirPath, coeId, sioPage }).then(function (args) {
-			let children = args.map(function (arg) {
-				return arg.nodeInfo;
-			});
 			nodeInfo.children = children;
-			resolve({ nodeInfo, files });
+			resolve(children);
 		});
 	});
 };
 
 
-// function parseFile(node, args) {
-// 	let { coeId, dirPath, files, sioPage } = args;
-// 	if (!node.file) {
-// 		return;
-// 	}
-// 	addFile(coeId, node.id, `${dirPath}/${sanitize(node.file.name)}`, args);
-// 	let file = node.file;
-// 	return {
-// 		name: sanitize(file.name),
-// 		dashifiedName: node.dashifiedName,
-// 		properties: file.properties
-// 	};
-// }
-
-
-// function addFile(coeId, id, outFilePath, args) {
-// 	let { files, sioPage } = args;
-// 	files.push({
-// 		url: `${cfg.sio.baseUrl}/${coeId}/file/${id}`,
-// 		path: outFilePath
-// 	});
-// }
-
-
 function processFile(fileNode, args) {
-	let { files, dirPath, coeId, baseUrl } = args;
+	let { dirPath, coeId } = args;
 	return new Promise(function (resolve, reject) {
 		let nodeInfo = getNodeInfo(fileNode, coeId, dirPath); //parseFile(fileNode, args);
-		if (fileNode === 'FileFolder') {
-			processFolder(fileNode, args).then(function () {
-				resolve({
-					nodeInfo: getNodeInfo(fileNode, coeId, dirPath),
-					nodeFiles: files
-				});
-			});
+		if (fileNode.type === 'FileFolder') {
+			processFolder(fileNode, args).then(resolve);
 			return;
 		}
 
-		resolve({
-			nodeInfo: nodeInfo,
-			nodeFiles: files
-		});
+		resolve(nodeInfo);
 	});
 }
 
 function processFolder(folderNode, args) {
+	let { dirPath, coeId } = args;
 	// xhr:Items.getList
 	// pid:"476424095723236572"
 	// sort:"[{"property":"type","direction":"ASC"},{"property":"shortName","direction":"ASC"},{"property":"extension","direction":"ASC"},{"property":"id","direction":"ASC"}]"
@@ -94,16 +67,23 @@ function processFolder(folderNode, args) {
 		sendXhr('Items.getList', {
 			pid: folderNode.id,
 			sort: [{ "property": "type", "direction": "ASC" }, { "property": "shortName", "direction": "ASC" }, { "property": "extension", "direction": "ASC" }, { "property": "id", "direction": "ASC" }]
-		}, function (args) {
-			let { error, response, body } = args;
+		}, {
+				uri: `${cfg.sio.baseUrl}/${coeId}/server/data?method=Items.getList`
+			}).then(function (args) {
+				let { error, response, body } = args;
 
-			if (body.error) {
-				Logger.error(`ERROR: ID: ${folderNode.id} -- ${JSON.stringify(body.error)}`);
-				Logger.error('Page cannot be downloaded!');
-				return;
-			}
+				if (body.error) {
+					Logger.error(`ERROR: ID: ${folderNode.id} -- ${JSON.stringify(body.error)}`);
+					Logger.error('Page cannot be downloaded!');
+					throw new Error(JSON.stringify(body.error));
+				}
 
-			resolve();  // TODO: args
-		});
+				let dirFiles = body.result.items;
+				promisefy(dirFiles, processFile, args).then(function (result) {
+					// console.log(result);
+					resolve(result);
+				});
+
+			});
 	});
 }
