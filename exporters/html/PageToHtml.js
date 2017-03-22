@@ -11,7 +11,7 @@ const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const linkColor = '#00adef';
 let newSioComponentsHtml = [];
 let cmpIndex = 0;
-const sioIdPrefix = cfg.confluence.sioIdPrefix || 'SIO';
+const sioIdPrefix = cfg.confluence.sioIdPrefix;
 
 module.exports = function processPage (sourceFolder) {
 	const useLayouts = true;
