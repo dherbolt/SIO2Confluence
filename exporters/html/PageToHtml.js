@@ -132,7 +132,7 @@ module.exports = function processPage (sourceFolder) {
 			}
 			else {
 				fileProps = node.file.properties;
-				fileName = node.file.value;
+				fileName = node.file.name;
 			}
 
 			if (fileProps.imageFormat) {

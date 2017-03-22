@@ -3,41 +3,43 @@ const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 
 module.exports = {
-	getNodeInfo(node, coeId, dirPath) {
-		let nodeInfo = {
-			type: node.type,
-			name: sanitize(node.name),
-			id: node.id,
-			dashifiedName: node.dashifiedName,
-			layout: node.layout,
-			value: node.value && (node.value.text || node.value.url),
-			file: parseFile(node, coeId, dirPath)
-		};
-
-		switch (node.type) {
-			case 'File':
-				nodeInfo.value = node.file;
-				break;
-			case 'Map':
-				nodeInfo.value = node.value.markerPosition;
-				break;
-			case 'Mashup':
-				nodeInfo.value = node.value.html;
-				break;
-			case 'Event':
-				nodeInfo.value = {
-					endDate: node.value.endDate,
-					startDate: node.value.startDate,
-					description: node.value.description,
-					location: node.value.location
-				}
-				break;
-			default:
-		}
-
-		return nodeInfo;
-	}
+	getNodeInfo: getNodeInfo
 };
+
+function getNodeInfo(node, coeId, dirPath) {
+	let nodeInfo = {
+		type: node.type,
+		name: sanitize(node.name),
+		id: node.id,
+		dashifiedName: node.dashifiedName,
+		layout: node.layout,
+		value: node.value && (node.value.text || node.value.url),
+		file: parseFile(node, coeId, dirPath)
+	};
+
+	switch (node.type) {
+		case 'File':
+			nodeInfo.value = node.file;
+			break;
+		case 'Map':
+			nodeInfo.value = node.value.markerPosition;
+			break;
+		case 'Mashup':
+			nodeInfo.value = node.value.html;
+			break;
+		case 'Event':
+			nodeInfo.value = {
+				endDate: node.value.endDate,
+				startDate: node.value.startDate,
+				description: node.value.description,
+				location: node.value.location
+			};
+			break;
+		default:
+	}
+
+	return nodeInfo;
+}
 
 
 function parseFile(node, coeId, dirPath) {

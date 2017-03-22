@@ -36,34 +36,34 @@ module.exports = function downloadFileLib(node, customParams) {
 };
 
 
-function parseFile(node, args) {
-	let { coeId, dirPath, files, sioPage } = args;
-	if (!node.file) {
-		return;
-	}
-	addFile(coeId, node.id, `${dirPath}/${sanitize(node.file.name)}`, args);
-	let file = node.file;
-	return {
-		name: sanitize(file.name),
-		dashifiedName: node.dashifiedName,
-		properties: file.properties
-	};
-}
+// function parseFile(node, args) {
+// 	let { coeId, dirPath, files, sioPage } = args;
+// 	if (!node.file) {
+// 		return;
+// 	}
+// 	addFile(coeId, node.id, `${dirPath}/${sanitize(node.file.name)}`, args);
+// 	let file = node.file;
+// 	return {
+// 		name: sanitize(file.name),
+// 		dashifiedName: node.dashifiedName,
+// 		properties: file.properties
+// 	};
+// }
 
 
-function addFile(coeId, id, outFilePath, args) {
-	let { files, sioPage } = args;
-	files.push({
-		url: `${cfg.sio.baseUrl}/${coeId}/file/${id}`,
-		path: outFilePath
-	});
-}
+// function addFile(coeId, id, outFilePath, args) {
+// 	let { files, sioPage } = args;
+// 	files.push({
+// 		url: `${cfg.sio.baseUrl}/${coeId}/file/${id}`,
+// 		path: outFilePath
+// 	});
+// }
 
 
 function processFile(fileNode, args) {
 	let { files, dirPath, coeId, baseUrl } = args;
 	return new Promise(function (resolve, reject) {
-		let nodeInfo = parseFile(fileNode, args);
+		let nodeInfo = getNodeInfo(fileNode, coeId, dirPath); //parseFile(fileNode, args);
 		if (fileNode === 'FileFolder') {
 			processFolder(fileNode, args).then(function () {
 				resolve({
