@@ -15,6 +15,7 @@
 		"targetSpace": "",
 		"targetPage": "",
 		"renamePages": false,
-		"uploadMissingFilesOnly": true
+		"uploadMissingFilesOnly": true,
+		"sioIdPrefix": "SIO"
 	}
 }
