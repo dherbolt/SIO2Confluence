@@ -50,5 +50,8 @@ function run(sourcePageUrl) {
 module.exports.exportFromSio = run;
 
 if (argv.length && path.normalize(process.argv[1]) === __filename) {
-	run(argv[0]);
+	run(argv[0]).then((args) => {
+		let { rootDir } = args;
+		Logger.log('DONE -- All downloaded in ' + rootDir);
+	});
 }

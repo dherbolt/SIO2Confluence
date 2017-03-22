@@ -221,5 +221,7 @@ function renamePages(confIdToNameMap) {
 module.exports.importToConfluence = run;
 
 if (argv.length && path.normalize(process.argv[1]) === __filename) {
-	run(argv[0]);
+	run(argv[0], null, () => {
+		Logger.log('DONE -- All uploaded');
+	});
 }
