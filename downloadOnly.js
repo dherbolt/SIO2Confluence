@@ -12,7 +12,7 @@ function bootstrap(callback) {
 	sendXhr('Bootstrap.bootstrap', {
 		branch: "production",
 		referral: ""
-	}, callback);
+	}, { callback });
 }
 
 
