@@ -24,7 +24,7 @@ module.exports = function downloadFileLib(node, customParams) {
 			for (let child of packedChildren) {
 				if (Array.isArray(child)) {
 					// unpack
-					Array.prototype.push.apply(children, child);  // concat & add items to 'children'
+					child.length && Array.prototype.push.apply(children, child);  // concat & add items to 'children'
 				}
 				else {
 					children.push(child);
@@ -43,7 +43,19 @@ function processFile(fileNode, args) {
 	return new Promise(function (resolve, reject) {
 		let nodeInfo = getNodeInfo(fileNode, coeId, dirPath); //parseFile(fileNode, args);
 		if (fileNode.type === 'FileFolder') {
-			processFolder(fileNode, args).then(resolve);
+			processFolder(fileNode, args).then(function(packedChildren) {
+				let children = [];
+				for (let child of packedChildren) {
+					if (Array.isArray(child)) {
+						// unpack
+						child.length && Array.prototype.push.apply(children, child);  // concat & add items to 'children'
+					}
+					else {
+						children.push(child);
+					}
+				}
+				resolve(children);
+			});
 			return;
 		}
 
