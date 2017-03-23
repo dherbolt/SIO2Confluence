@@ -20,17 +20,7 @@ module.exports = function downloadFileLib(node, customParams) {
 
 		promisefy(node.children, processFile, { dirPath, coeId, sioPage }).then(function (packedChildren) {
 			// unpack array of children
-			let children = [];
-			for (let child of packedChildren) {
-				if (Array.isArray(child)) {
-					// unpack
-					child.length && Array.prototype.push.apply(children, child);  // concat & add items to 'children'
-				}
-				else {
-					children.push(child);
-				}
-			}
-
+			let children = unpackArray(packedChildren);
 			nodeInfo.children = children;
 			resolve(nodeInfo);
 		});
@@ -38,22 +28,28 @@ module.exports = function downloadFileLib(node, customParams) {
 };
 
 
+function unpackArray(packedChildren) {
+	let children = [];
+	for (let child of packedChildren) {
+		if (Array.isArray(child)) {
+			// unpack
+			child.length && Array.prototype.push.apply(children, child);  // concat & add items to 'children'
+		}
+		else {
+			children.push(child);
+		}
+	}
+	return children;
+}
+
+
 function processFile(fileNode, args) {
 	let { dirPath, coeId } = args;
 	return new Promise(function (resolve, reject) {
 		let nodeInfo = getNodeInfo(fileNode, coeId, dirPath); //parseFile(fileNode, args);
 		if (fileNode.type === 'FileFolder') {
-			processFolder(fileNode, args).then(function(packedChildren) {
-				let children = [];
-				for (let child of packedChildren) {
-					if (Array.isArray(child)) {
-						// unpack
-						child.length && Array.prototype.push.apply(children, child);  // concat & add items to 'children'
-					}
-					else {
-						children.push(child);
-					}
-				}
+			processFolder(fileNode, args).then(function (packedChildren) {
+				let children = unpackArray(packedChildren);
 				resolve(children);
 			});
 			return;
@@ -78,25 +74,39 @@ function processFolder(folderNode, args) {
 			pid: folderNode.id,
 			sort: [{ "property": "type", "direction": "ASC" }, { "property": "shortName", "direction": "ASC" }, { "property": "extension", "direction": "ASC" }, { "property": "id", "direction": "ASC" }]
 		}, {
-			uri: `${cfg.sio.baseUrl}/${coeId}/server/data?method=Items.getList`
-		}).then(function (result) {
-			let { error, response, body } = result;
+				uri: `${cfg.sio.baseUrl}/${coeId}/server/data?method=Items.getList`
+			}).then(function (result) {
+				let { error, response, body } = result;
 
-			if (body.error) {
-				Logger.error(`ERROR: ID: ${folderNode.id} -- ${JSON.stringify(body.error)}`);
-				Logger.error('Page cannot be downloaded!');
-				throw new Error(JSON.stringify(body.error));
-			}
+				if (body.error) {
+					Logger.error(`ERROR: ID: ${folderNode.id} -- ${JSON.stringify(body.error)}`);
+					Logger.error('Page cannot be downloaded!');
+					throw new Error(JSON.stringify(body.error));
+				}
 
-			let dirFiles = body.result.items;
-			Logger.log(`Found ${dirFiles.length} inner files.`);
-			promisefy(dirFiles, processFile, args).then(function (result) {
-				// result = result.map((item) => {
-				// 	return `${sanitize(folderNode.name)}--${item}`;
-				// });
-				resolve(result);
+				let dirFiles = body.result.items;
+				Logger.log(`Found ${dirFiles.length} inner files.`);
+
+				for (let file of dirFiles) {
+					addPrefixToFileNode(file, folderNode);
+				}
+
+				promisefy(dirFiles, processFile, args).then(function (result) {
+					resolve(result);
+				});
+
 			});
-
-		});
 	});
+}
+
+function addPrefixToFileNode(fileNode, folderNode) {
+	// console.assert(fileNode.type === 'File');
+	console.assert(folderNode.type === 'FileFolder');
+
+	let name = `${sanitize(folderNode.name)}--${sanitize(fileNode.name)}`;
+	let dashifiedName = `${sanitize(folderNode.dashifiedName)}--${sanitize(fileNode.dashifiedName)}`;
+	Object.assign(fileNode, { name, dashifiedName });
+	if (fileNode.type === 'File') {  // folder does not have these
+		Object.assign(fileNode.file, { name, dashifiedName });
+	}
 }
