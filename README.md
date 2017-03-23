@@ -9,7 +9,7 @@ You need a [Git](https://git-scm.com/downloads) client and [Node.JS](https://nod
 - run `npm install`
 
 ## Usage
-- in `config.json`
+In `config.json`
   - set your Samepage.io and Confluence username and password
   - set Samepage
   	- `sourcePageUrl`, e.g. https://samepage.io/abc123/page-123456
@@ -17,9 +17,8 @@ You need a [Git](https://git-scm.com/downloads) client and [Node.JS](https://nod
 	- `targetSpace`, e.g. KERCON
 	- `targetPage`, e.g. My Page
 
-or
+and next time, you can
 
-- set `targetSpace`
 - run `npm run start <sourcePageUrl> <targetPage>`
 
 ## Other Tasks
