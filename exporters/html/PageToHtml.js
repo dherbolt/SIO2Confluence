@@ -205,6 +205,9 @@ module.exports = function processPage (sourceFolder) {
 			content += '</div>';
 			renderCmp(content);
 		}
+		else if (node.type === 'Map') {
+			Logger.log('Map component is not supported - skipping');
+		}
 		else {
 			Logger.log(`Unknown node type '${node.type}' -- '${JSON.stringify(node)}'`);
 			throw new Error(`Unknown node type ${node.type} -- ${JSON.stringify(node)}`);
