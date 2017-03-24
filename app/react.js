@@ -168,7 +168,7 @@ var Grid = React.createClass({
 		};
 
 		tidy(html, options, (err, parsedHtml) => {
-			document.getElementById('body').innerHTML = parsedHtml;
+			document.getElementById('content').innerHTML = parsedHtml;
 		});
 	},
 

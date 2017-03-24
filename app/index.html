@@ -3,7 +3,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
 	<script type="text/javascript" src="https://unpkg.com/react@15/dist/react.min.js"></script>
 	<script type="text/javascript" src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
 	<script type="text/javascript" src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
@@ -22,8 +22,13 @@
 </head>
 
 <body>
-	<div id="navigation"></div>
-	<div id="body"></div>
+	<div id="wrapper">
+		<div id="top-navigation">
+			<h1>Samepage Offline Edition</h1>
+  		</div>
+		<div id="navigation"></div>
+		<div id="content"></div>
+	</div>
 
 	<script type="text/babel" src="react.js"></script>
 </body>
