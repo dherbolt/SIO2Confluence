@@ -11,6 +11,7 @@ const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const promisefy = require(APP_ROOT + '/promisefy');
 const downloadFileLib = require(__dirname + '/FileLib');
 const { getNodeInfo } = require(__dirname + '/node');
+const json = require(APP_ROOT + '/json');
 var pages = {};
 
 let rootDir;
@@ -18,8 +19,16 @@ let rootDir;
 let files = [];
 global.files = files;
 
+
+global.dbPagesDone = 'data/incremental/pages-done.json';
+global.dbFilesDone = 'data/incremental/files-done.json';
+global.dbFilesToDownload = 'data/incremental/files-to-download.json';
+
+
 function download(pageId, parentDir) {
 	return new Promise(function (resolve, reject) {
+		let _pageId = pageId;
+		let _parentDir = parentDir;
 		// downloadFile({
 		// 	url: 'https://samepage.io/72f3728084841d1a9db65c44335a41d27bfa96c2/file/401469089400651104',
 		// 	path: 'download/__test---about-diaolog-final-spec-png'
@@ -33,70 +42,80 @@ function download(pageId, parentDir) {
 			let { error, response, body } = args;
 
 			if (body.error) {
-				Logger.error(`ERROR: ID: ${pageId} -- ${JSON.stringify(body.error)}`);
+				Logger.error(`ERROR: ID: ${_pageId} -- ${JSON.stringify(body.error)}`);
 				Logger.error('Page cannot be downloaded!');
 				return;
 			}
 
 			let sioPage = body.result.page;
-			let dirName = `${sioPage.dashifiedName}--${pageId}`;
-			let coeId = sioPage.coeRoomId.split('/')[0];
 
-			if (!parentDir) {
-				//Logger.log(`Cleaning ${dirName}`);
-				//jetpack.remove(dirName);
-				dirName = `download/${dirName}`;
-				rootDir = dirName;
+			return downloadCallback(_pageId, _parentDir, sioPage);
+		});
+	});
+}
+
+function downloadCallback(pageId, parentDir, sioPage) {
+	return new Promise(function (resolve, reject) {
+		let dirName = `${sioPage.dashifiedName}--${pageId}`;
+		let coeId = sioPage.coeRoomId.split('/')[0];
+
+		if (!parentDir) {
+			//Logger.log(`Cleaning ${dirName}`);
+			//jetpack.remove(dirName);
+			dirName = `download/${dirName}`;
+			rootDir = dirName;
+		}
+		pages[sioPage.dashifiedName] = parentDir;
+
+		Logger.log(`Downloaded ${sioPage.dashifiedName} --> ${pageId}`);
+		if (parentDir) {
+			dirName = `${parentDir}/${dirName}`;
+		}
+
+		json.write(`${dirName}/sio-page.json`, sioPage);
+
+		promisefy(sioPage.children, processChild, { coeId, dirPath: dirName, sioPage }).then(function (children) {
+			let taskComponents = sioPage.components && sioPage.components.taskComponents;
+
+			for (let task of (taskComponents || [])) {
+				children.push(getNodeInfo(task, coeId, dirName));
 			}
-			pages[sioPage.dashifiedName] = parentDir;
 
-			Logger.log(`Downloaded ${sioPage.dashifiedName} --> ${pageId}`);
-			if (parentDir) {
-				dirName = `${parentDir}/${dirName}`;
-			}
-
-			jetpack.write(`${dirName}/sio-page.json`, JSON.stringify(sioPage, null, '\t'));
-
-
-			promisefy(sioPage.children, processChild, { coeId, dirPath: dirName, sioPage }).then(function (children) {
-				let taskComponents = sioPage.components && sioPage.components.taskComponents;
-
-				for (let task of (taskComponents|| [])) {
-					children.push(getNodeInfo(task, coeId, dirName));
-				}
-
-				let page = Object.assign({}, getNodeInfo(sioPage, coeId, dirName), {
-					children: children,
-					isNewSio: !!sioPage.teamContainer
-				});
-
-				page = sortChildren(page);
-
-				jetpack.write(`${dirName}/page.json`, JSON.stringify(page, null, '\t'));
-
-				// skip subPages
-				if (!cfg.sio.downloadSubpages) {
-					downloadAllFiles(resolve);
-					return;
-				}
-
-				let subPages = [];
-				for (let page of sioPage.components.subpages) {
-					subPages.push(download(page.id, dirName));
-				}
-				Promise.all(subPages).then((function (parentDir) {
-
-					return function () {
-						if (parentDir) {  // subpage
-							resolve({ rootDir });
-							return;
-						}
-
-						downloadAllFiles(resolve);  // parent page completed
-						// Promise.all(allFiles).then(() => resolve());
-					};
-				})(parentDir));
+			let page = Object.assign({}, getNodeInfo(sioPage, coeId, dirName), {
+				children: children,
+				isNewSio: !!sioPage.teamContainer
 			});
+
+			page = sortChildren(page);
+
+			json.write(`${dirName}/page.json`, page);
+
+			json.update(global.dbPagesDone, {
+				[pageId]: true
+			});
+
+			// skip subPages
+			if (!cfg.sio.downloadSubpages) {
+				downloadAllFiles(resolve);
+				return;
+			}
+
+			let subPages = [];
+			for (let page of sioPage.components.subpages) {
+				subPages.push(download(page.id, dirName));
+			}
+			Promise.all(subPages).then((function (parentDir) {
+
+				return function () {
+					if (parentDir) {  // subpage
+						resolve({ rootDir });
+						return;
+					}
+
+					downloadAllFiles(resolve);  // parent page completed
+					// Promise.all(allFiles).then(() => resolve());
+				};
+			})(parentDir));
 		});
 	});
 }
@@ -185,8 +204,8 @@ function downloadCallback(index, resolve) {
 }
 
 function downloadFile(file, callback) {
-	let { url, path } = file;
 	return new Promise(function (resolve, reject) {
+		let { url, path, id } = file;
 		if (jetpack.exists(path)) {
 			resolve();
 			return;
@@ -207,7 +226,11 @@ function downloadFile(file, callback) {
 			Logger.log('content-length:', res.headers['content-length']);
 			Logger.log('write to ' + path);
 
-			request(option).pipe(fs.createWriteStream(path)).on('close', resolve);
+			request(option).pipe(fs.createWriteStream(path)).on('close', function () {
+				json.update(global.dbFilesDone, { [id]: file });
+				json.update(global.dbFilesToDownload, { [id]: undefined });
+				resolve.apply(this, arguments);
+			});
 		});
 	});
 }

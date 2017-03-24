@@ -1,6 +1,7 @@
 const sanitize = require(APP_ROOT + '/fileUtil').sanitize;
 const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
+const json = require(APP_ROOT + '/json');
 
 module.exports = {
 	getNodeInfo: getNodeInfo
@@ -65,9 +66,13 @@ function parseFile(node, coeId, dirPath) {
 	};
 }
 
+
 function addFile(coeId, id, outFilePath) {
-	global.files.push({
+	let fileInfo = {
 		url: `${cfg.sio.baseUrl}/${coeId}/file/${id}`,
-		path: outFilePath
-	});
+		path: outFilePath,
+		id: id
+	};
+	json.update(global.dbFilesToDownload, { [id]: fileInfo });
+	global.files.push(fileInfo);
 }

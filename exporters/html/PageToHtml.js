@@ -268,7 +268,7 @@ module.exports = function processPage (sourceFolder) {
 
 				description = description.replace(matchedUri, `<a href="${searchUrl}">${decodeURI(searchUrl)}</a>`);
 			}
-			
+
 
 			content.push('<div><ul>');
 			content.push(
@@ -283,6 +283,9 @@ module.exports = function processPage (sourceFolder) {
 
 			content.push('</ul></div>');
 			renderCmp(content.join(''));
+		}
+		else if (node.type === 'Comment') {
+			// skip
 		}
 		else {
 			Logger.log(`Unknown node type '${node.type}' -- '${JSON.stringify(node)}'`);
