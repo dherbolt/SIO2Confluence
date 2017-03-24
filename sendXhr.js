@@ -27,7 +27,7 @@ module.exports = function sendXhr(method, params, options = {}) {
 		request({
 			uri: options.uri || uri,
 			method: 'POST',
-			timeout: 10000,
+			timeout: 30000,
 			followRedirect: true,
 			followAllRedirects: true,
 			maxRedirects: 10,

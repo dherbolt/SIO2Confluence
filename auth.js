@@ -36,7 +36,7 @@ function sendXhr(method, params, callback) {
 		request({
 			uri: uri,
 			method: 'POST',
-			timeout: 10000,
+			timeout: 30000,
 			followRedirect: true,
 			followAllRedirects: true,
 			maxRedirects: 10,
@@ -69,7 +69,7 @@ module.exports.doLogin = function(userName, password, callback) {
 		request({
 			uri: `${cfg.sio.baseUrl}/login/oauth/token`,
 			method: 'POST',
-			timeout: 10000,
+			timeout: 30000,
 			followRedirect: true,
 			followAllRedirects: true,
 			maxRedirects: 10,

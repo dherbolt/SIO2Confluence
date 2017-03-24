@@ -189,7 +189,7 @@ function downloadFile(file, callback) {
 		let option = {
 			uri: url,
 			method: 'GET',
-			timeout: 10000,
+			timeout: 30000,
 			followRedirect: true,
 			followAllRedirects: true,
 			maxRedirects: 10,

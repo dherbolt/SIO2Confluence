@@ -54,6 +54,18 @@ module.exports = function processPage (sourceFolder) {
 		return (`${latinize(page.name)} [${sioIdPrefix}:${page.id}]`).replace(/\s+/g, ' ').trim();
 	}
 
+	function getComponentTitle (title, defValue) {
+		if (undefined === title) {
+			return defValue || '';
+		}
+
+		return title || '';
+	}
+
+	function getSearchUrl(sioUrl) {
+		return encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[${sioIdPrefix}:${getSioPageIdFromUrl(sioUrl)}]"`);
+	}
+
 	function addChild(node, html) {
 		if (node.layout && node.layout.column && node.layout.column !== lastLayout) {
 			if (lastLayout) {
@@ -89,21 +101,21 @@ module.exports = function processPage (sourceFolder) {
 
 			while (match = search.exec(value)) {
     			let matchedUri = match[2] || match[4];
-				let searchUrl = encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[${sioIdPrefix}:${getSioPageIdFromUrl(matchedUri)}]"`);
+				let searchUrl = getSearchUrl(matchedUri);
 
 				value = value.replace(matchedUri, searchUrl);
 
 				jetpack.append(APP_ROOT + '/logs/links.txt', `[${new Date().toISOString()}] Page ${page.name} (id: ${page.id}) contains links to other pages.\n`);
 			}
 
-			html.push(`<h2>${node.name || 'Text'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Text')}</h2>`);
 			html.push(`<div>${value}</div>`);
 			pushDelmiter(html);
 		}
 
 		else if (node.type === 'Images') {
 			// Logger.log(node.children[0].file);
-			html.push(`<h2>${node.name || 'Images'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Images')}</h2>`);
 			node.children && addChildren(node, html);
 			pushDelmiter(html);
 		}
@@ -115,7 +127,7 @@ module.exports = function processPage (sourceFolder) {
 		}
 
 		else if (node.type === 'FileLib') {
-			html.push(`<h2>${node.name || 'Files'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Files')}</h2>`);
 			node.children && addChildren(node, html);
 			pushDelmiter(html);
 		}
@@ -148,23 +160,36 @@ module.exports = function processPage (sourceFolder) {
 			page.subPages.push(Object.assign({}, node, {name: getConfluencePageName(node)}));
 		}
 		else if (node.type === 'LinkList') {
-			html.push(`<h2>${node.name || 'Links'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Links')}</h2>`);
 			addChildren(node, html);
 			pushDelmiter(html);
 		}
-		else if (node.type === "Link") {
-			renderCmp(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
+		else if (node.type === 'Link') {
+			let value = node.value;
+			let name = node.name;
+
+			let sioLinkRe = /\W((?:https:\/\/)?samepage\.io\/.*)|(\/.*\/#?page-.*)/gi;
+
+			if (sioLinkRe.test(value)) {
+				value = getSearchUrl(value);
+
+				if (sioLinkRe.test(name)) {
+					name = getSearchUrl(name);
+				}
+			}
+
+			renderCmp(`<div><a style="color:${linkColor};" href="${value}">${name}</a></div>`);
 		}
 		else if (node.type === "FileFolder") {
 			Logger.error(`>> ${getConfluencePageName(node)} contains a folder Skipping...`);
 		}
 		else if (node.type === 'Mashup') {
-			html.push(`<h2>${node.name || 'HTML'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'HTML')}</h2>`);
 			html.push(`<div>${node.value || ''}</div>`);
 			pushDelmiter(html);
 		}
 		else if (node.type === 'DropboxLinks') {
-			html.push(`<h2>${node.name || 'Cloud Files'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Cloud Files')}</h2>`);
 			addChildren(node, html);
 			pushDelmiter(html);
 		}
@@ -172,17 +197,17 @@ module.exports = function processPage (sourceFolder) {
 			renderCmp(`<div><a style="color:${linkColor};" href="${node.value}">${node.name}</a></div>`);
 		}
 		else if (node.type === 'Video' || node.type === 'Video2') {
-			html.push(`<h2>${node.name || 'Video'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Video')}</h2>`);
 			html.push(`<iframe width="560" height="315" src="${node.value || ''}" frameborder="0" allowfullscreen></iframe>`);
 			pushDelmiter(html);
 		}
 		else if (node.type === 'Map') {
-			html.push(`<h2>${node.name || 'Map'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Map')}</h2>`);
 			renderCmp(`<div><a style="color:${linkColor};" target="_blank" href="https://maps.google.com/maps?q=${node.value.lat},${node.value.lng}">Google Map</a></div>`);
 			pushDelmiter(html);
 		}
 		else if (node.type === 'EventList') {
-			html.push(`<h2>${node.name || 'Events'}</h2>`);
+			html.push(`<h2>${getComponentTitle(node.name, 'Events')}</h2>`);
 			addChildren(node, html);
 			pushDelmiter(html);
 		}
