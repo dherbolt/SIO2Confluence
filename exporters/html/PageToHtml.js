@@ -55,11 +55,7 @@ module.exports = function processPage (sourceFolder) {
 	}
 
 	function getComponentTitle (title, defValue) {
-		if (undefined === title) {
-			return defValue || '';
-		}
-
-		return title || '';
+		return title || defValue || '';
 	}
 
 	function getSearchUrl(sioUrl) {
@@ -250,6 +246,43 @@ module.exports = function processPage (sourceFolder) {
 			}
 			content += '</div>';
 			renderCmp(content);
+		}
+		else if (node.type === 'TaskList') {
+			html.push(`<h2>${getComponentTitle(node.name, 'Tasks')}</h2>`);
+			addChildren(node, html);
+			pushDelmiter(html);
+		}
+		else if (node.type === 'Task') {
+			let content = [];
+			let value = node.value || {};
+			let assengee = value.assignee && (value.assignee.fullname || value.assignee.emailAddress);
+			let progress = value.finished ? '&#x2713;' : (value.progress || 0) + '%';
+			let description = value.description;
+
+			let search = /\W?(https:\/\/samepage\.io\/[a-zA-Z0-9\/#!-]+)/gi;
+			let match;
+
+			while (match = search.exec(description)) {
+    			let matchedUri = match[1];
+				let searchUrl = getSearchUrl(matchedUri);
+
+				description = description.replace(matchedUri, `<a href="${searchUrl}">${decodeURI(searchUrl)}</a>`);
+			}
+			
+
+			content.push('<div><ul>');
+			content.push(
+				`<li>`,
+					`<span style="padding-right: 10px;">${progress}</span>`,
+					assengee ? `<span style="padding-right: 10px;">${assengee}</span>` : '',
+					node.name ? `<span style="padding-right: 10px;">${node.name}</span>` : '',
+					value.dueDate ? `<div style="padding-top: 5px;">${value.dueDate ? ('Due Date: ' + Date(value.dueDate)) : ''}</div>` : '',
+					description ? `<div style="padding-top: 5px;">${description || ''}</div>`: '',
+				`</li>`
+			);
+
+			content.push('</ul></div>');
+			renderCmp(content.join(''));
 		}
 		else {
 			Logger.log(`Unknown node type '${node.type}' -- '${JSON.stringify(node)}'`);
