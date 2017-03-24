@@ -29,6 +29,7 @@ function getNodeInfo(node, coeId, dirPath) {
 			break;
 		case 'Event':
 			nodeInfo.value = {
+				allday: node.value.allday,
 				endDate: node.value.endDate,
 				startDate: node.value.startDate,
 				description: node.value.description,

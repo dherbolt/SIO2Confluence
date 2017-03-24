@@ -190,23 +190,20 @@ module.exports = function processPage (sourceFolder) {
 			let content = `<div><b>${node.name}</b></div>`;
 
 			content += '<div>';
+			if (node.value.allday) {
+				content += `<li>date: ${Date(node.value.startDate)}</li>`;
+			} else {
+				content += `<li>starts: ${Date(node.value.startDate)}</li>`;
+				content += `<li>ends: ${Date(node.value.endDate)}</li>`;
+			}
 			if (node.value.location) {
 				content += `<li>location: ${node.value.location}</li>`;
 			}
 			if (node.value.description) {
-				content += `description: ${node.value.description}</li>`;
-			}
-			if (node.value.startDate) {
-				content += `<li>starts: ${node.value.startDate}</li>`;
-			}
-			if (node.value.endDate) {
-				content += `<li>ends: ${node.value.endDate}</li>`;
+				content += `<li>description: ${node.value.description}</li>`;
 			}
 			content += '</div>';
 			renderCmp(content);
-		}
-		else if (node.type === 'Map') {
-			Logger.log('Map component is not supported - skipping');
 		}
 		else {
 			Logger.log(`Unknown node type '${node.type}' -- '${JSON.stringify(node)}'`);
