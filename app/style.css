@@ -1,0 +1,40 @@
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			font-family: sans-serif;
+			/*overflow: hidden;*/
+		}
+
+		body * {
+			box-sizing: border-box;
+		}
+
+		#navigation {
+			overflow-y: auto;
+			display: inline-block;
+			/*height: 100%;*/
+			width: 300px;
+			background-color: #fafbfc;
+			border-bottom: 1px solid #e1e4e8;
+		}
+
+		#body {
+			display: inline-block;
+			position: absolute;
+			top: 0;
+		}
+
+		.gridRow {
+			margin: 5px;
+			/*border: 1px solid gray;*/
+		}
+
+		.gridRow.itemSelected,
+		.gridRow.itemOver {
+			background-color: #f2f2f2;
+		}
+
+		.gridRow.itemFocused {
+			background-color: #116cd6;
+		}
