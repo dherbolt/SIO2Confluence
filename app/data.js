@@ -15,9 +15,14 @@ var JsonData = {
 			var stat = fs.lstatSync(filename);
 			if (stat.isDirectory()) {
 				this.fromDir(filename, filter, callback); //recurse
-			} else if (filter.test(filename)) callback(filename);
-		};
+			}
+			else {
+				if (filter.test(filename)) {
+					callback(filename);
+				}
+			}
+		}
 	}
-}
+};
 
 module.exports = JsonData;

@@ -10,7 +10,7 @@
 	<script type="text/javascript">
 		const JsonData = require('./data.js');
 		let data = [];
-		JsonData.fromDir(__dirname + '/../download', /\/page\.json$/, function (filename) {
+		JsonData.fromDir(__dirname + '/../download', /[\/\\]page\.json$/, function (filename) {
 			let page = require(filename);
 			data.push({
 				filename: filename,
