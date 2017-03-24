@@ -73,6 +73,6 @@ function addFile(coeId, id, outFilePath) {
 		path: outFilePath,
 		id: id
 	};
-	json.update(global.dbFilesToDownload, { [id]: fileInfo });
+	// json.update(global.dbFilesToDownload, { [id]: fileInfo });
 	global.files.push(fileInfo);
 }

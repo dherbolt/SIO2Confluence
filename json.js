@@ -39,3 +39,54 @@ const json = {
 };
 
 module.exports = json;
+
+// --------------------------------------------------------------------------------------
+//                                         <TESTS>
+// --------------------------------------------------------------------------------------
+
+const testDir = 'logs/tests';
+let result, file;
+const assert = require('assert').strictEqual;
+
+// - read
+result = json.read(file = `${testDir}/non-existing.json`);
+assert('{}', JSON.stringify(result));
+
+
+// - write
+let dataA, dataB;
+dataA = {'a': 1};
+result = json.write(file = `${testDir}/json-write-test.json`, dataA);
+assert('{"a":1}', JSON.stringify(result));
+result = json.read(file);
+assert('{"a":1}', JSON.stringify(result));
+
+dataB = {'b': 2};
+result = json.write(file = `${testDir}/write-test.json`, dataB);
+assert('{"b":2}', JSON.stringify(result));
+result = json.read(file);
+assert('{"b":2}', JSON.stringify(result));
+
+
+// - update
+result = json.write(file = `${testDir}/update-test.json`, dataA);
+result = json.update(file, dataB);
+assert('{"a":1,"b":2}', JSON.stringify(result));
+result = json.read(file);
+assert('{"a":1,"b":2}', JSON.stringify(result));
+
+
+// - delete items by update
+result = json.write(file = `${testDir}/delete-test.json`, Object.assign({}, dataA, dataB));
+assert('{"a":1,"b":2}', JSON.stringify(result));
+result = json.update(file, {b: undefined});
+assert('{"a":1}', JSON.stringify(result));
+result = json.read(file);
+assert('{"a":1}', JSON.stringify(result));
+
+
+
+
+// --------------------------------------------------------------------------------------
+//                                         </TESTS>
+// --------------------------------------------------------------------------------------

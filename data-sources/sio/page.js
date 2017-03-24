@@ -20,41 +20,42 @@ let files = [];
 global.files = files;
 
 
-global.dbPagesDone = 'data/incremental/pages-done.json';
-global.dbFilesDone = 'data/incremental/files-done.json';
-global.dbFilesToDownload = 'data/incremental/files-to-download.json';
+const incrementalCacheRoot = 'data/incremental';
+global.dbPagesDone = incrementalCacheRoot + '/pages-done.json';
+// global.dbFilesDone = incrementalCacheRoot + '/files-done.json';
+// global.dbFilesToDownload = incrementalCacheRoot + '/files-to-download.json';
+global.dbFileLibsDiscovered = incrementalCacheRoot + '/filelibs-discovered.json';
 
 
 function download(pageId, parentDir) {
-	return new Promise(function (resolve, reject) {
-		let _pageId = pageId;
-		let _parentDir = parentDir;
-		// downloadFile({
-		// 	url: 'https://samepage.io/72f3728084841d1a9db65c44335a41d27bfa96c2/file/401469089400651104',
-		// 	path: 'download/__test---about-diaolog-final-spec-png'
-		// }).then(function () {
-		// 	Logger.log('----------------------');
-		// });
-		// return;
+	let _pageId = pageId;
+	let _parentDir = parentDir;
 
+	if (global.isIncrementalSioExport) {
+		let dirPath = json.read(global.dbPagesDone)[pageId];
+		if (dirPath) {
+			// Logger.log(`Using cache for page ${pageId} in ${dirPath}/sio-page.json`);
+			let sioPage = json.read(`${dirPath}/sio-page.json`);
+			return downloadAfterGetContentCallback(_pageId, _parentDir, sioPage, true);
+		}
+	}
 
-		getContent(pageId).then((args) => {
-			let { error, response, body } = args;
+	getContent(pageId).then((args) => {
+		let { error, response, body } = args;
 
-			if (body.error) {
-				Logger.error(`ERROR: ID: ${_pageId} -- ${JSON.stringify(body.error)}`);
-				Logger.error('Page cannot be downloaded!');
-				return;
-			}
+		if (body.error) {
+			Logger.error(`ERROR: ID: ${_pageId} -- ${JSON.stringify(body.error)}`);
+			Logger.error('Page cannot be downloaded!');
+			return;
+		}
 
-			let sioPage = body.result.page;
+		let sioPage = body.result.page;
 
-			return downloadCallback(_pageId, _parentDir, sioPage);
-		});
+		return downloadAfterGetContentCallback(_pageId, _parentDir, sioPage);
 	});
 }
 
-function downloadCallback(pageId, parentDir, sioPage) {
+function downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache) {
 	return new Promise(function (resolve, reject) {
 		let dirName = `${sioPage.dashifiedName}--${pageId}`;
 		let coeId = sioPage.coeRoomId.split('/')[0];
@@ -67,7 +68,8 @@ function downloadCallback(pageId, parentDir, sioPage) {
 		}
 		pages[sioPage.dashifiedName] = parentDir;
 
-		Logger.log(`Downloaded ${sioPage.dashifiedName} --> ${pageId}`);
+		Logger.log(`Downloaded ${sioPage.dashifiedName} --> ${pageId}` + (isCache ? ' [cache]' : ''));
+
 		if (parentDir) {
 			dirName = `${parentDir}/${dirName}`;
 		}
@@ -89,10 +91,7 @@ function downloadCallback(pageId, parentDir, sioPage) {
 			page = sortChildren(page);
 
 			json.write(`${dirName}/page.json`, page);
-
-			json.update(global.dbPagesDone, {
-				[pageId]: true
-			});
+			json.update(global.dbPagesDone, { [pageId]: dirName });
 
 			// skip subPages
 			if (!cfg.sio.downloadSubpages) {
@@ -182,11 +181,13 @@ function downloadAllFiles(resolve) {
 		Logger.log('Disabled files download, skipping...');
 		resolve({ rootDir });
 		return;
-	} else if (files.length === 0) {  // no files
+	}
+	else if (files.length === 0) {  // no files
 		Logger.log('No files found, skipping');
 		resolve({ rootDir });
 		return;
 	}
+	Logger.log(`Downloading ${files.length} files ...`);
 	downloadCallback(0, resolve);
 }
 
@@ -222,13 +223,13 @@ function downloadFile(file, callback) {
 			gzip: true,
 		};
 		request.head(option, function (err, res, body) {
-			Logger.log('content-type:', res.headers['content-type']);
+			// Logger.log('content-type:', res.headers['content-type']);
 			Logger.log('content-length:', res.headers['content-length']);
 			Logger.log('write to ' + path);
 
 			request(option).pipe(fs.createWriteStream(path)).on('close', function () {
-				json.update(global.dbFilesDone, { [id]: file });
-				json.update(global.dbFilesToDownload, { [id]: undefined });
+				// json.update(global.dbFilesDone, { [id]: file });
+				// json.update(global.dbFilesToDownload, { [id]: undefined });
 				resolve.apply(this, arguments);
 			});
 		});

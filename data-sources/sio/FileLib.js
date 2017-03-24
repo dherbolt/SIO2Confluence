@@ -4,12 +4,26 @@ const promisefy = require(APP_ROOT + '/promisefy');
 const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const sendXhr = require(APP_ROOT + '/sendXhr');
+const json = require(APP_ROOT + '/json');
 
 module.exports = function downloadFileLib(node, customParams) {
 	return new Promise(function (resolve, reject) {
 		let { dirPath, coeId, sioPage } = customParams;
 
 		console.assert(node.type === 'FileLib');
+
+		if (global.isIncrementalSioExport) {
+			let nodeInfo = json.read(global.dbFileLibsDiscovered)[node.id];
+			if (nodeInfo) {
+				Logger.log(`Using cache for FileLib ${node.id}`);
+				nodeInfo.children = nodeInfo.children || [];
+				for (let file of nodeInfo.children) {
+					getNodeInfo(file, coeId, dirPath);  // refresh node info to add items for download
+				}
+				resolve(nodeInfo);
+				return;
+			}
+		}
 
 		let nodeInfo = Object.assign({}, getNodeInfo(node, coeId, dirPath));
 
@@ -22,6 +36,7 @@ module.exports = function downloadFileLib(node, customParams) {
 			// unpack array of children
 			let children = unpackArray(packedChildren);
 			nodeInfo.children = children;
+			json.update(global.dbFileLibsDiscovered, { [node.id]: node });
 			resolve(nodeInfo);
 		});
 	});

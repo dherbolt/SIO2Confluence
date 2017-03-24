@@ -23,6 +23,7 @@ and next time, you can
 
 ## Other Tasks
 - `npm run export-from-sio <sourcePageUrl>`
+- `npm run export-from-sio <sourcePageUrl> continue` -- try to reuse valid results from previous export
 - `npm run import-to-confluence <folder> <targetPage>`
 - `npm run to-html <folder>`
 - `npm run download-only <sourcePageUrl>`

@@ -7,6 +7,7 @@ const auth = require(__dirname + '/auth');
 const cfg = JSON.parse(jetpack.read('config.json'));
 const path = require('path');
 let argv = process.argv.slice(2);
+const incrementalCacheRoot = __dirname + '/data/incremental';
 
 function bootstrap(callback) {
 	return sendXhr('Bootstrap.bootstrap', {
@@ -70,6 +71,15 @@ function run(sourcePageUrl) {
 module.exports.exportFromSio = run;
 
 if (argv.length && path.normalize(process.argv[1]) === __filename) {
+	if (argv[1] === 'continue') {
+		Logger.log('Running incremental SIO export...');
+		global.isIncrementalSioExport = true;
+	}
+	else if (jetpack.exists(incrementalCacheRoot)) {
+		Logger.log(`Removing incremental cache ${incrementalCacheRoot}`);
+		jetpack.remove(incrementalCacheRoot);
+	}
+
 	run(argv[0]).then((args) => {
 		let { rootDir } = args;
 		Logger.log('DONE -- All downloaded in ' + rootDir);
