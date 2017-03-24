@@ -66,6 +66,27 @@ module.exports = function processPage (sourceFolder) {
 		return encodeURI(`${cfg.confluence.baseUrl}/dosearchsite.action?queryString="[${sioIdPrefix}:${getSioPageIdFromUrl(sioUrl)}]"`);
 	}
 
+	function replaceYoutubeIframe(html) {
+		let pattern = /src="([^"]+)"/,
+			match = pattern.exec(html),
+			url;
+
+		if (match) {
+			url = match[1];
+		} else {
+			return html;
+		}
+
+		pattern = /embed\/([\d\w]+)/;
+		match = pattern.exec(url)
+
+		let youtubeId = match[1];
+
+		return (youtubeId)
+			? `<a target="_blank" href="http://youtube.com/watch?v=${youtubeId}"><img src="http://img.youtube.com/vi/${youtubeId}/1.jpg" width="100%" /></a>`
+			: html;
+	}
+
 	function addChild(node, html) {
 		if (node.layout && node.layout.column && node.layout.column !== lastLayout) {
 			if (lastLayout) {
@@ -185,7 +206,7 @@ module.exports = function processPage (sourceFolder) {
 		}
 		else if (node.type === 'Mashup') {
 			html.push(`<h2>${getComponentTitle(node.name, 'HTML')}</h2>`);
-			html.push(`<div>${node.value || ''}</div>`);
+			html.push(replaceYoutubeIframe(node.value));
 			pushDelmiter(html);
 		}
 		else if (node.type === 'DropboxLinks') {
@@ -198,7 +219,7 @@ module.exports = function processPage (sourceFolder) {
 		}
 		else if (node.type === 'Video' || node.type === 'Video2') {
 			html.push(`<h2>${getComponentTitle(node.name, 'Video')}</h2>`);
-			html.push(`<iframe width="560" height="315" src="${node.value || ''}" frameborder="0" allowfullscreen></iframe>`);
+			html.push(replaceYoutubeIframe(node.value));
 			pushDelmiter(html);
 		}
 		else if (node.type === 'Map') {
