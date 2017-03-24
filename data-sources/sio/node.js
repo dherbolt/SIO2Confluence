@@ -36,11 +36,20 @@ function getNodeInfo(node, coeId, dirPath) {
 				location: node.value.location
 			};
 			break;
+		case 'Task':
+			nodeInfo.value = node.value;
+			break;
+		case 'TaskList':
+			nodeInfo.children = node.tasks.map((task) => {
+				return getNodeInfo(task, coeId, dirPath);
+			});
+			break;
 		default:
 	}
 
 	return nodeInfo;
 }
+
 
 
 function parseFile(node, coeId, dirPath) {

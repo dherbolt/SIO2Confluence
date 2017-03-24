@@ -59,6 +59,12 @@ function download(pageId, parentDir) {
 
 
 			promisefy(sioPage.children, processChild, { coeId, dirPath: dirName, sioPage }).then(function (children) {
+				let taskComponents = sioPage.components && sioPage.components.taskComponents;
+
+				for (let task of (taskComponents|| [])) {
+					children.push(getNodeInfo(task, coeId, dirName));
+				}
+
 				let page = Object.assign({}, getNodeInfo(sioPage, coeId, dirName), {
 					children: children,
 					isNewSio: !!sioPage.teamContainer
