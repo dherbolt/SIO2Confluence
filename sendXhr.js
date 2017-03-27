@@ -43,6 +43,7 @@ module.exports = function sendXhr(method, params, options = {}) {
 		}, function (error, response, body) {
 			if (error) {
 				Logger.log(`Request error: ${method}, ${JSON.stringify(error, null, '\t')}`);
+				Logger.log(`Params: ${JSON.stringify(params)}`);
 				throw error;
 			}
 			else {
