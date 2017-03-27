@@ -76,6 +76,10 @@ module.exports = function processPage (sourceFolder) {
 		pattern = /embed\/([\d\w]+)/;
 		match = pattern.exec(url);
 
+		if (!match) {
+			return html;
+		}
+
 		let youtubeId = match[1];
 
 		return (youtubeId)

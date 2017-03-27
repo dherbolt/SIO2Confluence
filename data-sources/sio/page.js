@@ -224,6 +224,12 @@ function downloadFile(file, callback) {
 		};
 		request.head(option, function (err, res, body) {
 			// Logger.log('content-type:', res.headers['content-type']);
+			if (err) {
+				Logger.error(`Error downloading file: ${url}\n\n${JSON.stringify(file)}\n\n`
+				+ `Maybe the file is too big. You can try to download it manually and copy to the target folder `
+				+ `(or just create empty file with the same name).\n\n -- \n\n${JSON.stringify(err)}`);
+				throw err;
+			}
 			Logger.log('content-length:', res.headers['content-length']);
 			Logger.log('write to ' + path);
 
