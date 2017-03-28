@@ -18,7 +18,8 @@ module.exports = function downloadFileLib(node, customParams) {
 				Logger.log(`Using cache for FileLib ${node.id}`);
 				nodeInfo.children = nodeInfo.children || [];
 				for (let file of nodeInfo.children) {
-					getNodeInfo(file, coeId, dirPath);  // refresh node info to add items for download
+					let fileInfo = getNodeInfo(file, coeId, dirPath);  // refresh node info to add items for download
+					Object.assign(file, fileInfo);
 				}
 				resolve(nodeInfo);
 				return;
@@ -62,6 +63,7 @@ function processFile(fileNode, args) {
 	let { dirPath, coeId } = args;
 	return new Promise(function (resolve, reject) {
 		let nodeInfo = getNodeInfo(fileNode, coeId, dirPath); //parseFile(fileNode, args);
+
 		if (fileNode.type === 'FileFolder') {
 			processFolder(fileNode, args).then(function (packedChildren) {
 				let children = unpackArray(packedChildren);

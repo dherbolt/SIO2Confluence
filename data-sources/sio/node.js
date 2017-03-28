@@ -57,10 +57,11 @@ function parseFile(node, coeId, dirPath) {
 	if (!node.file) {
 		return;
 	}
-	addFile(coeId, node.id, `${dirPath}/${sanitize(node.file.name)}`);
 	let file = node.file;
+	let name = sanitize(file.name);
+	addFile(coeId, node.id, `${dirPath}/${name}`);
 	return {
-		name: sanitize(file.name),
+		name: name,
 		dashifiedName: node.dashifiedName,
 		properties: file.properties
 	};
