@@ -40,7 +40,7 @@ function download(pageId, parentDir) {
 		}
 	}
 
-	getContent(pageId).then((args) => {
+	return getContent(pageId).then((args) => {
 		let { error, response, body } = args;
 
 		if (body.error) {
