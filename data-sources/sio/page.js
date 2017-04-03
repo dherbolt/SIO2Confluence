@@ -59,16 +59,6 @@ function downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache) {
 	return new Promise(function (resolve, reject) {
 		let dirName = `${sioPage.dashifiedName}--${pageId}`;
 		let coeId;
-		try {
-			coeId = sioPage.coeRoomId.split('/')[0];
-		}
-		catch (e) {
-			Logger.error(`Error parsion coeRoomId for page ${pageId}`);
-			downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache).then(() => {
-				resolve();
-			});
-			return;
-		}
 
 		if (!parentDir) {
 			//Logger.log(`Cleaning ${dirName}`);
@@ -83,6 +73,19 @@ function downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache) {
 		if (parentDir) {
 			dirName = `${parentDir}/${dirName}`;
 		}
+
+		try {
+			coeId = sioPage.coeRoomId.split('/')[0];
+		}
+		catch (e) {
+			Logger.error(`Error parsing coeRoomId for page ${pageId}, removing ${rootDir}...`);
+			jetpack.remove(rootDir);
+			download(pageId, parentDir).then(() => {
+				resolve();
+			});
+			return;
+		}
+
 
 		json.write(`${dirName}/sio-page.json`, sioPage);
 
