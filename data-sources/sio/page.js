@@ -33,7 +33,7 @@ function download(pageId, parentDir) {
 
 	if (global.isIncrementalSioExport) {
 		let dirPath = json.read(global.dbPagesDone)[pageId];
-		if (dirPath) {
+		if (dirPath && jetpack.exists(dirPath)) {
 			// Logger.log(`Using cache for page ${pageId} in ${dirPath}/sio-page.json`);
 			let sioPage = json.read(`${dirPath}/sio-page.json`);
 			return downloadAfterGetContentCallback(_pageId, _parentDir, sioPage, true);
@@ -58,7 +58,17 @@ function download(pageId, parentDir) {
 function downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache) {
 	return new Promise(function (resolve, reject) {
 		let dirName = `${sioPage.dashifiedName}--${pageId}`;
-		let coeId = sioPage.coeRoomId.split('/')[0];
+		let coeId;
+		try {
+			coeId = sioPage.coeRoomId.split('/')[0];
+		}
+		catch (e) {
+			Logger.error(`Error parsion coeRoomId for page ${pageId}`);
+			downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache).then(() => {
+				resolve();
+			});
+			return;
+		}
 
 		if (!parentDir) {
 			//Logger.log(`Cleaning ${dirName}`);
