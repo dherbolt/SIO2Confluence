@@ -105,6 +105,10 @@ function processFolder(folderNode, args) {
 				Logger.log(`Found ${dirFiles.length} inner files.`);
 
 				for (let file of dirFiles) {
+					if (file.type === 'File' && !file.file) {
+						console.log(file);
+					}
+					throw 'error';
 					addPrefixToFileNode(file, folderNode);
 				}
 
