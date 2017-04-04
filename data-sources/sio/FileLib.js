@@ -107,8 +107,9 @@ function processFolder(folderNode, args) {
 				for (let file of dirFiles) {
 					if (file.type === 'File' && !file.file) {
 						console.log(file);
+						process.exit();
 					}
-					throw 'error';
+					
 					addPrefixToFileNode(file, folderNode);
 				}
 
