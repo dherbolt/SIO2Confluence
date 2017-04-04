@@ -81,7 +81,7 @@ function downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache) {
 			Logger.error(`Error parsing coeRoomId for page ${pageId}, removing ${rootDir}...`);
 			jetpack.remove(rootDir);
 			download(pageId, parentDir).then(() => {
-				resolve();
+				resolve({ rootDir });
 			});
 			return;
 		}
