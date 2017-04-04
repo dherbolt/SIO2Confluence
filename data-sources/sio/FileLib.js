@@ -94,6 +94,7 @@ function processFolder(folderNode, args) {
 				uri: `${cfg.sio.baseUrl}/${coeId}/server/data?method=Items.getList`
 			}).then(function (result) {
 				let { error, response, body } = result;
+				let dirFilesFiltered = [];
 
 				if (body.error) {
 					Logger.error(`ERROR: ID: ${folderNode.id} -- ${JSON.stringify(body.error)}`);
@@ -106,14 +107,15 @@ function processFolder(folderNode, args) {
 
 				for (let file of dirFiles) {
 					if (file.type === 'File' && !file.file) {
-						console.log(file);
-						process.exit();
+						Logger.error(`ERROR: File '${file.name}' not found!`);
 					}
-					
-					addPrefixToFileNode(file, folderNode);
+					else {
+						addPrefixToFileNode(file, folderNode);
+						dirFilesFiltered.push(file);
+					}		
 				}
 
-				promisefy(dirFiles, processFile, args).then(function (result) {
+				promisefy(dirFilesFiltered, processFile, args).then(function (result) {
 					resolve(result);
 				});
 
