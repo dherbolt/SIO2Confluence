@@ -14,6 +14,14 @@ module.exports = function addTable(node, html) {
 		rowKeys.push(i + 1);
 	}
 
+	// generate combinations AA, AB, ...
+	let length = columnKeys.length;
+	for (let i = 0; i < 10; i++) {
+		for (let j = 0; j < length; j++) {
+			columnKeys.push(columnKeys[i] + columnKeys[j]);
+		}
+	}
+
 	let cellKeys = {};
 	for (let row = 0; row <= rows; row++) {
 		for (let column = 0; column < columns; column++) {
