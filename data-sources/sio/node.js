@@ -1,4 +1,4 @@
-const sanitize = require(APP_ROOT + '/fileUtil').sanitize;
+const { sanitize, sanitizeName } = require(APP_ROOT + '/fileUtil');
 const jetpack = require('fs-jetpack');
 const cfg = JSON.parse(jetpack.read(APP_ROOT + '/config.json'));
 const json = require(APP_ROOT + '/json');
@@ -10,7 +10,7 @@ module.exports = {
 function getNodeInfo(node, coeId, dirPath) {
 	let nodeInfo = {
 		type: node.type,
-		name: sanitize(node.name),
+		name: sanitizeName(node.name),
 		id: node.id,
 		dashifiedName: node.dashifiedName,
 		layout: node.layout,

@@ -2,8 +2,7 @@ const APP_ROOT = __dirname + '/../..';
 const request = require('request');
 const fs = require('fs');
 const sortChildren = require(__dirname + '/sortChildren');
-const sanitize = require(APP_ROOT + '/fileUtil').sanitize;
-
+const { sanitize, sanitizeName } = require(APP_ROOT + '/fileUtil');
 const sendXhr = require(APP_ROOT + '/sendXhr');
 const auth = require(APP_ROOT + '/auth');
 const jetpack = require('fs-jetpack');
@@ -12,6 +11,7 @@ const promisefy = require(APP_ROOT + '/promisefy');
 const downloadFileLib = require(__dirname + '/FileLib');
 const { getNodeInfo } = require(__dirname + '/node');
 const json = require(APP_ROOT + '/json');
+const latinize = require(APP_ROOT + '/lib/Latinize').latinize;
 var pages = {};
 
 let rootDir;
@@ -102,6 +102,7 @@ function downloadAfterGetContentCallback(pageId, parentDir, sioPage, isCache) {
 			});
 
 			page = sortChildren(page);
+			page.name = sanitizeName(latinize(page.name));
 
 			json.write(`${dirName}/page.json`, page);
 			json.update(global.dbPagesDone, { [pageId]: dirName });

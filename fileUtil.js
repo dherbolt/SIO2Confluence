@@ -1,9 +1,9 @@
 module.exports = {
 	sanitize(str) {
-		if (str) {
-			return str.replace(/[\?\|&;:\$%@"'<>\(\)\+#,ФЭ]…/g, "").replace(/[–\/]/gi, '-');
-		}
+		return str ? str.replace(/[\?\|&;:\$%@"'<>\(\)\+#,ФЭ…]/g, "").replace(/[–\/]/gi, '-') : '';
+	},
 
-		return '';
+	sanitizeName(str) {
+		return str ? str.replace(/[…]/g, "...").replace(/[–\/]/gi, '-') : '';
 	}
 };
