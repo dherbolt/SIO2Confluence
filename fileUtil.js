@@ -11,7 +11,7 @@ module.exports = {
 			.replace(/[\@/]/gi, ' at ')
 			.replace(/[\%/]/gi, ' percent ')
 			.replace(/[\$/]/gi, ' dollar ')
-			.replace(/\?\|&;:\$%@"'<>\(\)\+#,ФЭ…]/gi, '')
+			.replace(/[\?\|&;:\$%@"'<>\(\)\+#,ФЭ…]/gi, '')
 			: '';
 	}
 };
